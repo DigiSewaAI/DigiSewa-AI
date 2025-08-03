@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiSewa AI - Professional Invoice Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --accent: #f59e0b;
+            --accent-light: #fde68a;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #10b981;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --border: #e2e8f0;
+            --card-bg: #ffffff;
+            --text: #334155;
+            --text-light: #94a3b8;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+        }
+        
+        .dark-mode {
+            --primary: #3b82f6;
+            --primary-dark: #1d4ed8;
+            --accent: #f59e0b;
+            --accent-light: #fde68a;
+            --dark: #0f172a;
+            --light: #1e293b;
+            --gray: #94a3b8;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --text-light: #cbd5e1;
+            --border: #334155;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        body.dark-mode {
+            background: linear-gradient(135deg, #0c4a6e 0%, #1e3a8a 100%);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: var(--dark);
+        }
+        
+        .btn-primary:hover {
+            background: #fbbf24;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .status-badge {
+            background: var(--warning);
+            color: var(--dark);
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 15px;
+        }
+        
+        .status-badge.paid {
+            background: var(--success);
+            color: white;
+        }
+        
+        .status-badge.overdue {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: background 0.3s;
+        }
+        
+        .section-title {
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-light);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            color: var(--accent);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: var(--light);
+            color: var(--text);
+        }
+        
+        body.dark-mode .form-control {
+            background: #334155;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .invoice-preview {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        .invoice-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .invoice-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .invoice-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+        
+        .invoice-status {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .detail-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .detail-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            font-size: 1.2rem;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            min-width: 120px;
+            color: var(--text);
+        }
+        
+        .detail-value {
+            color: var(--text);
+            flex: 1;
+        }
+        
+        .invoice-details-row {
+            display: flex;
+            padding: 20px 40px;
+            flex-wrap: wrap;
+            gap: 30px;
+            border-bottom: 1px solid var(--border);
+            background: var(--light);
+        }
+        
+        body.dark-mode .invoice-details-row {
+            background: #334155;
+        }
+        
+        .detail-item {
+            display: flex;
+            gap: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .detail-item strong {
+            color: var(--primary);
+        }
+        
+        .invoice-body {
+            padding: 30px 40px;
+        }
+        
+        .services-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+        }
+        
+        .services-table th {
+            background: var(--primary);
+            color: white;
+            text-align: left;
+            padding: 15px 20px;
+            font-weight: 500;
+        }
+        
+        .services-table td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .services-table tr:nth-child(even) {
+            background: var(--light);
+        }
+        
+        body.dark-mode .services-table tr:nth-child(even) {
+            background: #334155;
+        }
+        
+        .services-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .discount-row {
+            background: rgba(220, 252, 231, 0.5) !important;
+            font-weight: 600;
+            color: #16a34a;
+        }
+        
+        .total-row {
+            background: rgba(245, 158, 11, 0.1) !important;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .total-row td {
+            border-top: 2px solid var(--accent);
+            border-bottom: none !important;
+        }
+        
+        .summary-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+        
+        .summary-box {
+            width: 300px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px dashed var(--border);
+        }
+        
+        .summary-total {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 2px solid var(--accent);
+        }
+        
+        .payment-info {
+            padding: 30px 40px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            background: var(--light);
+            border-top: 1px solid var(--border);
+        }
+        
+        body.dark-mode .payment-info {
+            background: #334155;
+        }
+        
+        .notes {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+        }
+        
+        .notes h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .notes ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .notes li {
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+        
+        .signature-area {
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+        }
+        
+        .signature-box {
+            text-align: center;
+            width: 45%;
+        }
+        
+        .signature-line {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            margin: 40px 0 10px;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--dark);
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        /* Logo Styles */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-img {
+            height: 65px;
+            max-width: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: white;
+            padding: 5px;
+        }
+        
+        .logo-placeholder {
+            width: 65px;
+            height: 65px;
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .invoice-details-row,
+            .payment-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .signature-area {
+                flex-direction: column;
+                gap: 30px;
+            }
+            
+            .signature-box {
+                width: 100%;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .controls {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .payment-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .invoice-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .invoice-meta {
+                align-items: center;
+            }
+            
+            .logo-img {
+                height: 50px;
+            }
+        }
+        
+        .services-list {
+            margin-top: 20px;
+        }
+        
+        .service-item {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .service-header {
+            font-weight: 600;
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .add-service-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .delete-service {
+            color: var(--danger);
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .action-icon {
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .action-icon:hover {
+            transform: scale(1.2);
+        }
+        
+        .toggle-section {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toggle-btn {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-btn input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        .qr-code {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .customization-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .theme-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .theme-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .theme-option.active {
+            border-color: var(--primary);
+        }
+        
+        .theme-classic { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); }
+        .theme-minimal { background: linear-gradient(135deg, #10b981 0%, #047857 100%); }
+        .theme-bold { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        
+        .language-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .lang-btn {
+            padding: 8px 15px;
+            background: #e2e8f0;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .lang-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .dark-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .required:after {
+            content: " *";
+            color: var(--danger);
+        }
+        
+        .toggle-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .invoice-number-gen {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .invoice-number-gen input {
+            flex: 1;
+        }
+        
+        .invoice-number-gen button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0 15px;
+            cursor: pointer;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .currency-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .currency-flag {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            background: #f1f5f9;
+        }
+        
+        .logo-preview {
+            max-height: 60px;
+            max-width: 200px;
+            object-fit: contain;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .logo-help {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #e6f7ff;
+            border-radius: 8px;
+            border-left: 4px solid #1890ff;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-file-invoice-dollar logo-icon"></i>
+                <h1>DigiSewa <span>AI</span> Invoice Generator</h1>
+                <div class="status-badge" id="invoiceStatus">
+                    <i class="fas fa-circle"></i> UNPAID
+                </div>
+            </div>
+            <div class="controls">
+                <button class="btn btn-primary" id="generatePdf">
+                    <i class="fas fa-file-pdf"></i> Export as PDF
+                </button>
+                <button class="btn btn-secondary" id="printInvoice">
+                    <i class="fas fa-print"></i> Print Invoice
+                </button>
+                <button class="btn btn-secondary" id="sendEmail">
+                    <i class="fas fa-envelope"></i> Send via Email
+                </button>
+            </div>
+        </header>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-cog"></i> Customization</h2>
+            <div class="customization-options">
+                <div>
+                    <label>Color Theme</label>
+                    <div class="theme-options">
+                        <div class="theme-option theme-classic active" data-theme="classic" title="Classic Blue"></div>
+                        <div class="theme-option theme-minimal" data-theme="minimal" title="Minimal Green"></div>
+                        <div class="theme-option theme-bold" data-theme="bold" title="Bold Orange"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <label>Language</label>
+                    <div class="language-selector">
+                        <button class="lang-btn active">EN</button>
+                        <button class="lang-btn">NP</button>
+                    </div>
+                </div>
+                
+                <div class="dark-mode-toggle">
+                    <label>Dark Mode</label>
+                    <label class="toggle-btn">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-image"></i> Company Logo</h2>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="logoUpload">Upload Company Logo</label>
+                    <input type="file" id="logoUpload" class="form-control" accept="image/*">
+                    <p class="help-text">Recommended size: 200px wide, transparent background</p>
+                    <div class="logo-preview-container" style="margin-top: 15px;">
+                        <img id="logoPreview" class="logo-preview" alt="Logo Preview">
+                    </div>
+                    
+                    <div class="logo-help">
+                        <p><strong>Note:</strong> If you have placed your logo.png file in:</p>
+                        <p><code>D:\My Projects\DigiSewa Ai\images\logo.png</code></p>
+                        <p>Please use the file uploader above to select it. The system will remember your logo for future use.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-user"></i> Client Information</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="clientName" class="required">Client Name</label>
+                    <input type="text" id="clientName" class="form-control" value="Fusion OZ Pvt Ltd" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactPerson" class="required">Contact Person</label>
+                    <input type="text" id="contactPerson" class="form-control" value="Rajat Pradhan" required>
+                </div>
+                <div class="form-group">
+                    <label for="clientPhone" class="required">Phone</label>
+                    <input type="text" id="clientPhone" class="form-control" value="+977-1-4106617" required>
+                </div>
+                <div class="form-group">
+                    <label for="clientEmail" class="required">Email</label>
+                    <input type="email" id="clientEmail" class="form-control" value="info.np@fusionoz.com" required>
+                </div>
+                <div class="form-group full-width">
+                    <label for="clientAddress" class="required">Address</label>
+                    <input type="text" id="clientAddress" class="form-control" value="Level 4, Samar Building, New Baneshwor, Kathmandu" required>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-file-invoice"></i> Invoice Details</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="invoiceNumber" class="required">Invoice Number</label>
+                    <div class="invoice-number-gen">
+                        <input type="text" id="invoiceNumber" class="form-control" value="DS-2023-087" required>
+                        <button id="generateInvoiceNumber"><i class="fas fa-sync-alt"></i></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="issueDate" class="required">Issue Date</label>
+                    <input type="date" id="issueDate" class="form-control" value="2025-07-29" required>
+                </div>
+                <div class="form-group">
+                    <label for="dueDate" class="required">Due Date</label>
+                    <input type="date" id="dueDate" class="form-control" value="2025-08-08" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectName" class="required">Project Name</label>
+                    <input type="text" id="projectName" class="form-control" value="Fusion OZ Landing Page" required>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-list"></i> Services</h2>
+            <div class="services-list">
+                <div class="service-item service-header">
+                    <div>Description</div>
+                    <div>Hours</div>
+                    <div>Rate</div>
+                    <div>Amount</div>
+                </div>
+                <div class="service-item">
+                    <input type="text" class="form-control" value="Landing Page Design & Layout">
+                    <input type="number" class="form-control" value="8" min="0" step="0.5">
+                    <input type="number" class="form-control" value="1500" min="0">
+                    <div>12,000</div>
+                </div>
+                <div class="service-item">
+                    <input type="text" class="form-control" value="Responsive Development (Mobile/Tablet)">
+                    <input type="number" class="form-control" value="6" min="0" step="0.5">
+                    <input type="number" class="form-control" value="1500" min="0">
+                    <div>9,000</div>
+                </div>
+                <div class="service-item">
+                    <input type="text" class="form-control" value="Interactive Elements (Slideshow, Forms)">
+                    <input type="number" class="form-control" value="4" min="0" step="0.5">
+                    <input type="number" class="form-control" value="1500" min="0">
+                    <div>6,000</div>
+                </div>
+                <div class="service-item">
+                    <input type="text" class="form-control" value="Form Validation & Submission Handling">
+                    <input type="number" class="form-control" value="3" min="0" step="0.5">
+                    <input type="number" class="form-control" value="1500" min="0">
+                    <div>4,500</div>
+                </div>
+                <div class="service-item">
+                    <input type="text" class="form-control" value="Cross-Browser Testing & Optimization">
+                    <input type="number" class="form-control" value="2" min="0" step="0.5">
+                    <input type="number" class="form-control" value="1500" min="0">
+                    <div>3,000</div>
+                </div>
+                <div class="service-item">
+                    <input type="text" class="form-control" value="Content Integration & SEO Optimization">
+                    <input type="number" class="form-control" value="1" min="0" step="0.5">
+                    <input type="number" class="form-control" value="1500" min="0">
+                    <div>1,500</div>
+                </div>
+                <button class="add-service-btn" id="addService">
+                    <i class="fas fa-plus"></i> Add Service
+                </button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-percent"></i> Discount & Tax</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="discount">Discount Amount
+                        <span class="tooltip">
+                            <i class="fas fa-info-circle"></i>
+                            <span class="tooltiptext">Enter the discount amount in the selected currency</span>
+                        </span>
+                    </label>
+                    <input type="number" id="discount" class="form-control" value="4000" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="discountReason">Discount Reason</label>
+                    <input type="text" id="discountReason" class="form-control" value="Special courtesy discount">
+                </div>
+                <div class="form-group">
+                    <label for="taxRate">Tax Rate (%)</label>
+                    <input type="number" id="taxRate" class="form-control" value="0" min="0" max="100">
+                </div>
+                <div class="form-group">
+                    <label for="currency">Currency</label>
+                    <div class="currency-selector">
+                        <select id="currency" class="form-control">
+                            <option value="NPR">NPR (Nepalese Rupees)</option>
+                            <option value="USD">USD (US Dollar)</option>
+                            <option value="EUR">EUR (Euro)</option>
+                            <option value="INR">INR (Indian Rupee)</option>
+                        </select>
+                        <div class="currency-flag" id="currencySymbol">रु</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-sticky-note"></i> Notes & Terms</h2>
+            <div class="form-group">
+                <label for="paymentTerms">Payment Terms</label>
+                <textarea id="paymentTerms" class="form-control" rows="4">Payment due within 10 days of invoice date
+50% advance payment required to commence work
+Late payments are subject to 1.5% monthly interest fee
+Includes 30 days of post-delivery support
+All prices are in Nepalese Rupees (NPR)
+Bank transfer details provided above</textarea>
+            </div>
+            <div class="form-group">
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" class="form-control" rows="3">Thank you for choosing DigiSewa AI. We appreciate your business!</textarea>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-credit-card"></i> Payment Information</h2>
+            <div class="toggle-option">
+                <label>Show Bank Details</label>
+                <label class="toggle-btn">
+                    <input type="checkbox" id="showBankDetails" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div id="bankDetailsSection">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="bankName">Bank Name</label>
+                        <input type="text" id="bankName" class="form-control" value="Sanima Bank">
+                    </div>
+                    <div class="form-group">
+                        <label for="accountName">Account Name</label>
+                        <input type="text" id="accountName" class="form-control" value="Parashar Regmi">
+                    </div>
+                    <div class="form-group">
+                        <label for="accountNumber">Account Number</label>
+                        <input type="text" id="accountNumber" class="form-control" value="078011060000481">
+                    </div>
+                    <div class="form-group">
+                        <label for="accountType">Account Type</label>
+                        <input type="text" id="accountType" class="form-control" value="Current Account">
+                    </div>
+                    <div class="form-group">
+                        <label for="branch">Branch</label>
+                        <input type="text" id="branch" class="form-control" value="Kathmandu Main Branch">
+                    </div>
+                </div>
+                
+                <div class="toggle-option">
+                    <label>Include QR Code for Payment</label>
+                    <label class="toggle-btn">
+                        <input type="checkbox" id="includeQrCode" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="qr-code" id="qrCodeSection">
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode" style="font-size: 3rem; color: #cbd5e1;"></i>
+                    </div>
+                    <p>Scan to pay via mobile banking</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="section-title"><i class="fas fa-signature"></i> Signature Settings</h2>
+            <div class="toggle-option">
+                <label>Enable Signature Section</label>
+                <label class="toggle-btn">
+                    <input type="checkbox" id="enableSignature" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Invoice Preview -->
+        <div class="invoice-preview" id="invoicePreview">
+            <div class="invoice-header">
+                <div class="logo-container">
+                    <img id="previewLogo" class="logo-img" alt="DigiSewa AI Logo">
+                    <div>
+                        <h2>DigiSewa AI</h2>
+                        <p>(Freelance Service)</p>
+                    </div>
+                </div>
+                <div class="invoice-title">INVOICE</div>
+                <div class="invoice-meta">
+                    <div class="invoice-status" id="preview-status">UNPAID</div>
+                    <div>Date: <span id="preview-issueDate">July 29, 2025</span></div>
+                </div>
+            </div>
+            
+            <div class="info-section">
+                <div class="detail-card">
+                    <h3>Client Information</h3>
+                    <div class="detail-row">
+                        <div class="detail-label">Client:</div>
+                        <div class="detail-value" id="preview-clientName">Fusion OZ Pvt Ltd</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Contact:</div>
+                        <div class="detail-value" id="preview-contactPerson">Rajat Pradhan</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Email:</div>
+                        <div class="detail-value" id="preview-clientEmail">info.np@fusionoz.com</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Phone:</div>
+                        <div class="detail-value" id="preview-clientPhone">+977-1-4106617</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Address:</div>
+                        <div class="detail-value" id="preview-clientAddress">Level 4, Samar Building, New Baneshwor, Kathmandu</div>
+                    </div>
+                </div>
+                
+                <div class="detail-card">
+                    <h3>Service Provider</h3>
+                    <div class="detail-row">
+                        <div class="detail-label">Company:</div>
+                        <div class="detail-value">DigiSewa AI</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Name:</div>
+                        <div class="detail-value">Parashar Regmi</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Email:</div>
+                        <div class="detail-value">parasharregmi@gmail.com</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Phone:</div>
+                        <div class="detail-value">+977 9761762036</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Address:</div>
+                        <div class="detail-value">Kathmandu, Nepal</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="invoice-details-row">
+                <div class="detail-item">
+                    <strong>Invoice #:</strong> <span id="preview-invoiceNumber">DS-2023-087</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Issue Date:</strong> <span id="preview-issueDate2">July 29, 2025</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Due Date:</strong> <span id="preview-dueDate">August 8, 2025</span>
+                </div>
+                <div class="detail-item">
+                    <strong>Project:</strong> <span id="preview-projectName">Fusion OZ Landing Page</span>
+                </div>
+            </div>
+            
+            <div class="invoice-body">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">Services Rendered</h3>
+                <table class="services-table">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Hours</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="preview-services">
+                        <!-- Services will be populated here -->
+                    </tbody>
+                </table>
+                
+                <div class="summary-container">
+                    <div class="summary-box">
+                        <h3 style="color: var(--primary); margin-bottom: 15px; text-align: center;">Summary</h3>
+                        <div class="summary-item">
+                            <div>Subtotal:</div>
+                            <div><span id="currency-symbol">रु</span> <span id="subtotal">36,000</span></div>
+                        </div>
+                        <div class="summary-item">
+                            <div>Discount:</div>
+                            <div><span id="currency-symbol2">रु</span> <span id="discount-amount">4,000</span></div>
+                        </div>
+                        <div class="summary-item">
+                            <div>Tax (<span id="tax-rate">0</span>%):</div>
+                            <div><span id="currency-symbol3">रु</span> <span id="tax-amount">0</span></div>
+                        </div>
+                        <div class="summary-total">
+                            <div>Total Due:</div>
+                            <div><span id="currency-symbol4">रु</span> <span id="total-due">32,000</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-info">
+                <div class="notes">
+                    <h3>Notes</h3>
+                    <p><strong>Disclaimer:</strong> DigiSewa AI is a freelance brand name operated by Parashar Regmi. It is not yet a registered company at the time of issuing this invoice. This invoice is for documentation and reference purposes only.</p>
+                    
+                    <h4>Payment Terms</h4>
+                    <ul id="preview-paymentTerms">
+                        <!-- Payment terms will be populated here -->
+                    </ul>
+                    
+                    <div class="detail-row">
+                        <div class="detail-label">Note:</div>
+                        <div class="detail-value">Please ensure to mention the invoice number (<span id="preview-invoiceNumber2">DS-2023-087</span>) during payment.</div>
+                    </div>
+                    
+                    <p style="margin-top: 15px; font-style: italic; color: var(--text);" id="preview-notes">
+                        <!-- Notes will be populated here -->
+                    </p>
+                </div>
+                
+                <div id="bankInfoPreview">
+                    <div class="notes">
+                        <h3>Bank Information</h3>
+                        <div class="detail-row">
+                            <div class="detail-label">Bank:</div>
+                            <div class="detail-value" id="preview-bankName">Sanima Bank</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Account Name:</div>
+                            <div class="detail-value" id="preview-accountName">Parashar Regmi</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Account Number:</div>
+                            <div class="detail-value" id="preview-accountNumber">078011060000481</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Account Type:</div>
+                            <div class="detail-value" id="preview-accountType">Current Account</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Branch:</div>
+                            <div class="detail-value" id="preview-branch">Kathmandu Main Branch</div>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-code" id="previewQrCode">
+                        <div class="qr-placeholder">
+                            <i class="fas fa-qrcode" style="font-size: 3rem; color: #cbd5e1;"></i>
+                        </div>
+                        <p>Scan to pay via mobile banking</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="signature-area" id="signaturePreview">
+                <div class="signature-box">
+                    <p>_________________________</p>
+                    <p>Client Signature</p>
+                    <p id="preview-clientName2">Fusion OZ Pvt Ltd</p>
+                </div>
+                <div class="signature-box">
+                    <p>_________________________</p>
+                    <p>Service Provider Signature</p>
+                    <p>Parashar Regmi, DigiSewa AI</p>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <p>This invoice is issued by an individual service provider operating under the freelance brand DigiSewa AI.</p>
+                <p>DigiSewa AI - Premium Technical Solutions | Kathmandu, Nepal | +977 9761762036 | <a href="mailto:parasharregmi@gmail.com">parasharregmi@gmail.com</a></p>
+                <p>This is a computer-generated invoice and does not require a physical signature.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize DOM elements
+        const invoicePreview = document.getElementById('invoicePreview');
+        const showBankDetails = document.getElementById('showBankDetails');
+        const bankDetailsSection = document.getElementById('bankDetailsSection');
+        const enableSignature = document.getElementById('enableSignature');
+        const signaturePreview = document.getElementById('signaturePreview');
+        const includeQrCode = document.getElementById('includeQrCode');
+        const qrCodeSection = document.getElementById('qrCodeSection');
+        const previewQrCode = document.getElementById('previewQrCode');
+        const bankInfoPreview = document.getElementById('bankInfoPreview');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const currencySelector = document.getElementById('currency');
+        const currencySymbol = document.getElementById('currencySymbol');
+        const currencySymbols = document.querySelectorAll('[id^="currency-symbol"]');
+        const logoUpload = document.getElementById('logoUpload');
+        const logoPreview = document.getElementById('logoPreview');
+        const previewLogo = document.getElementById('previewLogo');
+        
+        // Currency symbols map
+        const currencySymbolMap = {
+            'NPR': 'रु',
+            'USD': '$',
+            'EUR': '€',
+            'INR': '₹'
+        };
+        
+        // Function to format dates
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+        
+        // Function to update status badge based on due date
+        function updateInvoiceStatus() {
+            const issueDate = new Date(document.getElementById('issueDate').value);
+            const dueDate = new Date(document.getElementById('dueDate').value);
+            const today = new Date();
+            
+            const statusBadge = document.getElementById('invoiceStatus');
+            const previewStatus = document.getElementById('preview-status');
+            
+            // Reset classes
+            statusBadge.className = 'status-badge';
+            previewStatus.className = 'invoice-status';
+            
+            if (today > dueDate) {
+                statusBadge.innerHTML = '<i class="fas fa-circle"></i> OVERDUE';
+                statusBadge.classList.add('overdue');
+                previewStatus.textContent = 'OVERDUE';
+                previewStatus.style.color = '#ef4444';
+            } else if (today <= dueDate) {
+                statusBadge.innerHTML = '<i class="fas fa-circle"></i> UNPAID';
+                statusBadge.classList.add('warning');
+                previewStatus.textContent = 'UNPAID';
+                previewStatus.style.color = '#f59e0b';
+            } else {
+                statusBadge.innerHTML = '<i class="fas fa-circle"></i> PAID';
+                statusBadge.classList.add('paid');
+                previewStatus.textContent = 'PAID';
+                previewStatus.style.color = '#10b981';
+            }
+        }
+        
+        // Function to update preview
+        function updatePreview() {
+            // Client Information
+            document.getElementById('preview-clientName').textContent = document.getElementById('clientName').value;
+            document.getElementById('preview-clientName2').textContent = document.getElementById('clientName').value;
+            document.getElementById('preview-contactPerson').textContent = document.getElementById('contactPerson').value;
+            document.getElementById('preview-clientPhone').textContent = document.getElementById('clientPhone').value;
+            document.getElementById('preview-clientEmail').textContent = document.getElementById('clientEmail').value;
+            document.getElementById('preview-clientAddress').textContent = document.getElementById('clientAddress').value;
+            
+            // Invoice Details
+            document.getElementById('preview-invoiceNumber').textContent = document.getElementById('invoiceNumber').value;
+            document.getElementById('preview-invoiceNumber2').textContent = document.getElementById('invoiceNumber').value;
+            document.getElementById('preview-issueDate').textContent = formatDate(document.getElementById('issueDate').value);
+            document.getElementById('preview-issueDate2').textContent = formatDate(document.getElementById('issueDate').value);
+            document.getElementById('preview-dueDate').textContent = formatDate(document.getElementById('dueDate').value);
+            document.getElementById('preview-projectName').textContent = document.getElementById('projectName').value;
+            
+            // Bank Details
+            document.getElementById('preview-bankName').textContent = document.getElementById('bankName').value;
+            document.getElementById('preview-accountName').textContent = document.getElementById('accountName').value;
+            document.getElementById('preview-accountNumber').textContent = document.getElementById('accountNumber').value;
+            document.getElementById('preview-accountType').textContent = document.getElementById('accountType').value;
+            document.getElementById('preview-branch').textContent = document.getElementById('branch').value;
+            
+            // Update status
+            updateInvoiceStatus();
+            
+            // Payment Terms
+            const paymentTerms = document.getElementById('paymentTerms').value.split('\n');
+            const paymentTermsList = document.getElementById('preview-paymentTerms');
+            paymentTermsList.innerHTML = '';
+            
+            paymentTerms.forEach(term => {
+                if (term.trim() !== '') {
+                    const li = document.createElement('li');
+                    li.textContent = term;
+                    paymentTermsList.appendChild(li);
+                }
+            });
+            
+            // Notes
+            document.getElementById('preview-notes').textContent = document.getElementById('notes').value;
+            
+            // Services
+            updateServicesPreview();
+        }
+        
+        // Function to update services preview
+        function updateServicesPreview() {
+            const servicesContainer = document.getElementById('preview-services');
+            servicesContainer.innerHTML = '';
+            
+            const serviceItems = document.querySelectorAll('.service-item:not(.service-header)');
+            let subtotal = 0;
+            
+            serviceItems.forEach(item => {
+                const inputs = item.querySelectorAll('input');
+                if (inputs.length === 3) {
+                    const description = inputs[0].value;
+                    const hours = parseFloat(inputs[1].value) || 0;
+                    const rate = parseFloat(inputs[2].value) || 0;
+                    const amount = hours * rate;
+                    subtotal += amount;
+                    
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${description}</td>
+                        <td>${hours}</td>
+                        <td>${rate.toLocaleString()}</td>
+                        <td>${amount.toLocaleString()}</td>
+                    `;
+                    servicesContainer.appendChild(tr);
+                }
+            });
+            
+            // Add discount row
+            const discount = parseFloat(document.getElementById('discount').value) || 0;
+            const discountReason = document.getElementById('discountReason').value;
+            
+            if (discount > 0) {
+                const discountRow = document.createElement('tr');
+                discountRow.classList.add('discount-row');
+                discountRow.innerHTML = `
+                    <td colspan="3" style="text-align: right;">${discountReason}:</td>
+                    <td>-${discount.toLocaleString()}</td>
+                `;
+                servicesContainer.appendChild(discountRow);
+            }
+            
+            // Add total row
+            const taxRate = parseFloat(document.getElementById('taxRate').value) || 0;
+            const taxAmount = (subtotal - discount) * (taxRate / 100);
+            const totalDue = subtotal - discount + taxAmount;
+            
+            const totalRow = document.createElement('tr');
+            totalRow.classList.add('total-row');
+            totalRow.innerHTML = `
+                <td colspan="3" style="text-align: right;">TOTAL:</td>
+                <td>${totalDue.toLocaleString()}</td>
+            `;
+            servicesContainer.appendChild(totalRow);
+            
+            // Update summary
+            document.getElementById('subtotal').textContent = subtotal.toLocaleString();
+            document.getElementById('discount-amount').textContent = discount.toLocaleString();
+            document.getElementById('tax-rate').textContent = taxRate;
+            document.getElementById('tax-amount').textContent = taxAmount.toLocaleString();
+            document.getElementById('total-due').textContent = totalDue.toLocaleString();
+        }
+        
+        // Add new service
+        document.getElementById('addService').addEventListener('click', () => {
+            const servicesList = document.querySelector('.services-list');
+            const newService = document.createElement('div');
+            newService.classList.add('service-item');
+            newService.innerHTML = `
+                <input type="text" class="form-control" placeholder="Service description">
+                <input type="number" class="form-control" value="1" min="0" step="0.5">
+                <input type="number" class="form-control" value="0" min="0">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span>0</span>
+                    <i class="fas fa-trash delete-service" style="margin-left: 10px;"></i>
+                </div>
+            `;
+            
+            // Insert before the "Add Service" button
+            servicesList.insertBefore(newService, document.getElementById('addService'));
+            
+            // Add event listeners to new inputs
+            const inputs = newService.querySelectorAll('input');
+            inputs[1].addEventListener('input', calculateServiceAmount);
+            inputs[2].addEventListener('input', calculateServiceAmount);
+            
+            // Add delete functionality
+            const deleteBtn = newService.querySelector('.delete-service');
+            deleteBtn.addEventListener('click', () => {
+                newService.remove();
+                updateServicesPreview();
+            });
+            
+            // Trigger calculation
+            calculateServiceAmount.call(inputs[1]);
+        });
+        
+        // Calculate service amount
+        function calculateServiceAmount() {
+            const serviceItem = this.parentElement;
+            const inputs = serviceItem.querySelectorAll('input');
+            const hours = parseFloat(inputs[1].value) || 0;
+            const rate = parseFloat(inputs[2].value) || 0;
+            const amountElement = serviceItem.querySelector('div > span');
+            
+            amountElement.textContent = (hours * rate).toLocaleString();
+            updateServicesPreview();
+        }
+        
+        // Add event listeners to existing inputs
+        document.querySelectorAll('.service-item input').forEach(input => {
+            if (input.type === 'number') {
+                input.addEventListener('input', calculateServiceAmount);
+            }
+        });
+        
+        // Add delete functionality to existing service items
+        document.querySelectorAll('.delete-service').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.service-item').remove();
+                updateServicesPreview();
+            });
+        });
+        
+        // Add event listeners to form controls
+        const formControls = document.querySelectorAll('input, textarea, select');
+        formControls.forEach(control => {
+            control.addEventListener('input', updatePreview);
+        });
+        
+        // Print functionality
+        document.getElementById('printInvoice').addEventListener('click', () => {
+            window.print();
+        });
+        
+        // Generate PDF functionality
+        document.getElementById('generatePdf').addEventListener('click', () => {
+            // Validate required fields
+            const requiredFields = document.querySelectorAll('[required]');
+            let isValid = true;
+            
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.borderColor = '#ef4444';
+                } else {
+                    field.style.borderColor = '';
+                }
+            });
+            
+            if (!isValid) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            // Show loading state
+            const btn = document.getElementById('generatePdf');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                html2canvas(invoicePreview).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                    const imgWidth = 210; // A4 width in mm
+                    const pageHeight = 297; // A4 height in mm
+                    const imgHeight = canvas.height * imgWidth / canvas.width;
+                    let heightLeft = imgHeight;
+                    let position = 0;
+                    
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                    
+                    // Add additional pages if needed
+                    while (heightLeft >= 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                    }
+                    
+                    pdf.save(`DigiSewa_Invoice_${document.getElementById('invoiceNumber').value}.pdf`);
+                    
+                    // Restore button state
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                });
+            }, 1000);
+        });
+        
+        // Toggle bank details
+        showBankDetails.addEventListener('change', () => {
+            if (showBankDetails.checked) {
+                bankDetailsSection.style.display = 'block';
+                bankInfoPreview.style.display = 'block';
+            } else {
+                bankDetailsSection.style.display = 'none';
+                bankInfoPreview.style.display = 'none';
+            }
+        });
+        
+        // Toggle signature section
+        enableSignature.addEventListener('change', () => {
+            if (enableSignature.checked) {
+                signaturePreview.style.display = 'flex';
+            } else {
+                signaturePreview.style.display = 'none';
+            }
+        });
+        
+        // Toggle QR code
+        includeQrCode.addEventListener('change', () => {
+            if (includeQrCode.checked) {
+                qrCodeSection.style.display = 'flex';
+                previewQrCode.style.display = 'flex';
+            } else {
+                qrCodeSection.style.display = 'none';
+                previewQrCode.style.display = 'none';
+            }
+        });
+        
+        // Theme switching
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.theme-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Apply theme
+                if (this.dataset.theme === 'minimal') {
+                    document.documentElement.style.setProperty('--primary', '#10b981');
+                    document.documentElement.style.setProperty('--primary-dark', '#047857');
+                } else if (this.dataset.theme === 'bold') {
+                    document.documentElement.style.setProperty('--primary', '#f59e0b');
+                    document.documentElement.style.setProperty('--primary-dark', '#d97706');
+                } else {
+                    document.documentElement.style.setProperty('--primary', '#2563eb');
+                    document.documentElement.style.setProperty('--primary-dark', '#1e40af');
+                }
+            });
+        });
+        
+        // Language switching
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Here you would implement language switching logic
+                alert('Language switched to ' + (this.textContent === 'EN' ? 'English' : 'Nepali'));
+            });
+        });
+        
+        // Dark mode toggle
+        darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+                document.body.classList.add('dark-mode');
+            } else {
+                document.body.classList.remove('dark-mode');
+            }
+        });
+        
+        // Currency selection
+        currencySelector.addEventListener('change', function() {
+            const currency = this.value;
+            const symbol = currencySymbolMap[currency] || 'रु';
+            
+            // Update all currency symbols
+            currencySymbols.forEach(el => {
+                el.textContent = symbol;
+            });
+            
+            currencySymbol.textContent = symbol;
+        });
+        
+        // Generate invoice number
+        document.getElementById('generateInvoiceNumber').addEventListener('click', function() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const randomNum = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            
+            document.getElementById('invoiceNumber').value = `DS-${year}-${month}${day}-${randomNum}`;
+            updatePreview();
+        });
+        
+        // Send email functionality
+        document.getElementById('sendEmail').addEventListener('click', function() {
+            const email = prompt('Enter client email address:', document.getElementById('clientEmail').value);
+            if (email) {
+                const projectName = document.getElementById('projectName').value;
+                const invoiceNumber = document.getElementById('invoiceNumber').value;
+                
+                const emailBody = `Dear Rajat ji,\n\nPlease find the attached invoice for the ${projectName} project delivered by DigiSewa AI (freelance brand).\n\nKindly review and let me know if you need any clarification.`;
+                
+                // In a real implementation, this would send the email
+                alert(`Email would be sent to ${email} with body:\n\n${emailBody}`);
+            }
+        });
+        
+        // Logo upload functionality
+        logoUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    logoPreview.src = e.target.result;
+                    previewLogo.src = e.target.result;
+                    
+                    // Save to localStorage
+                    localStorage.setItem('digisewaLogo', e.target.result);
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Load logo from localStorage on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLogo = localStorage.getItem('digisewaLogo');
+            if (savedLogo) {
+                logoPreview.src = savedLogo;
+                previewLogo.src = savedLogo;
+            } else {
+                // Set default logo if none exists
+                logoPreview.src = 'https://via.placeholder.com/200x60/2563eb/ffffff?text=DigiSewa+AI';
+                previewLogo.src = 'https://via.placeholder.com/200x60/2563eb/ffffff?text=DigiSewa+AI';
+            }
+            
+            // Initialize the preview
+            updatePreview();
+            
+            // Set up auto-update for date fields
+            document.getElementById('issueDate').addEventListener('change', updateInvoiceStatus);
+            document.getElementById('dueDate').addEventListener('change', updateInvoiceStatus);
+        });
+    </script>
+</body>
+</html>
