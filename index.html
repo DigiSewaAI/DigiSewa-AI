@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>DigiSewa AI | Premium Technical Solutions</title>
     <meta name="description" content="Empowering your digital journey with AI-powered websites, apps, and data-driven solutions in Nepal.">
     <meta name="keywords" content="AI solutions, web development, Nepal, digital transformation, app development">
@@ -63,17 +63,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.75rem 1rem; /* More compact for mobile */
+            padding: 0.75rem 1rem;
             width: 100%;
             box-sizing: border-box;
         }
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 10px; /* Slightly reduced for mobile */
+            gap: 10px;
         }
         .logo {
-            height: 40px; /* Slightly smaller for mobile */
+            height: 40px;
             width: auto;
             display: block;
             transition: none !important;
@@ -81,7 +81,7 @@
             opacity: 1 !important;
         }
         .logo-text {
-            font-size: 22px; /* Slightly smaller for mobile */
+            font-size: 22px;
             font-weight: 700;
             background: var(--gradient);
             -webkit-background-clip: text;
@@ -91,9 +91,11 @@
         .nav-links {
             display: flex;
             list-style: none;
+            margin: 0;
+            padding: 0;
         }
         .nav-links li {
-            margin-left: 20px; /* Reduced for mobile */
+            margin-left: 20px;
         }
         .nav-links a {
             text-decoration: none;
@@ -101,7 +103,7 @@
             font-weight: 500;
             transition: all 0.3s ease;
             position: relative;
-            font-size: 15px; /* Slightly smaller for mobile */
+            font-size: 15px;
         }
         .nav-links a:hover {
             color: var(--primary);
@@ -982,6 +984,11 @@
         @media (max-width: 768px) {
             .mobile-menu {
                 display: block;
+                position: absolute;
+                right: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 1000;
             }
             .nav-links {
                 position: fixed;
@@ -1162,7 +1169,6 @@
         <div class="container">
             <nav class="navbar">
                 <div class="logo-container">
-                    <!-- Logo size fixed to 50px height -->
                     <img src="images/logo.png" alt="DigiSewa AI Logo" class="logo">
                     <div class="logo-text">DigiSewa AI</div>
                 </div>
