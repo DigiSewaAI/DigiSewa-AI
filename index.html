@@ -298,6 +298,11 @@
             display: inline-block;
             position: relative;
         }
+        .section-title .subtitle {
+            font-size: 1.1rem;
+            color: var(--gray);
+            margin-top: 10px;
+        }
         .section-title h2::after {
             content: '';
             position: absolute;
@@ -1496,7 +1501,7 @@
         <div class="container">
             <div class="section-title">
                 <h2>Our AI Chat Assistant</h2>
-                <p>Available 24/7 to answer your questions in English or Nepali</p>
+                <p class="subtitle">Available 24/7 to answer your questions in English or Nepali</p>
             </div>
             <div class="chat-demo">
                 <div class="chat-header">
@@ -1522,6 +1527,22 @@
                     </div>
                     <div class="message bot-message">
                         हामी काठमाडौं, नेपालमा अवस्थित छौं। तपाईं हामीलाई +९७७ ९७६१७६२०३६ मा फोन गर्न सक्नुहुन्छ वा regmiashish629@gmail.com मा इमेल गर्न सक्नुहुन्छ।
+                        <div class="message-time">Just now</div>
+                    </div>
+                    <div class="message user-message">
+                        How much do your services cost?
+                        <div class="message-time">Just now</div>
+                    </div>
+                    <div class="message bot-message">
+                        Our pricing is tailored to each project's requirements. We offer free consultations to provide accurate estimates based on your specific needs.
+                        <div class="message-time">Just now</div>
+                    </div>
+                    <div class="message user-message">
+                        कति समयमा वेबसाइट बनाउन सक्नुहुन्छ?
+                        <div class="message-time">Just now</div>
+                    </div>
+                    <div class="message bot-message">
+                        सामान्य वेबसाइटहरू २-४ सप्ताहमा बनाउन सकिन्छ। जटिल परियोजनाहरू अतिरिक्त समय लिन सक्छन्।
                         <div class="message-time">Just now</div>
                     </div>
                 </div>
@@ -1948,14 +1969,49 @@
         
         // Predefined Q&A in both languages
         const qaPairs = {
+            // English questions
             "what is digisewa ai?": "DigiSewa AI provides premium AI-powered technical solutions including web development, app creation, and digital transformation services tailored for businesses in Nepal.",
             "how can i contact support?": "You can contact our support team via email at support@digisewaai.com, call us at +977 9761762036, or use our contact form.",
             "how does your service work?": "We start with a free consultation to understand your needs, then create a customized solution using the latest technologies. Our process includes design, development, testing, and deployment.",
+            "what services do you offer?": "We specialize in AI solutions, web development, mobile apps, e-commerce, digital marketing, and custom software solutions.",
+            "do you offer free consultations?": "Yes! We offer free initial consultations to discuss your project requirements and provide recommendations.",
+            "how much do your services cost?": "Our pricing is tailored to each project's requirements. We offer free consultations to provide accurate estimates based on your specific needs.",
+            "what industries do you serve?": "We serve various industries including hospitality, travel, e-commerce, education, healthcare, and more.",
+            "how long does a project take?": "Project timelines vary based on complexity. Simple websites take 2-4 weeks, while complex applications may take 3-6 months.",
+            "do you provide maintenance?": "Yes, we offer ongoing maintenance and support packages to keep your digital solutions running smoothly.",
+            "can you update my existing website?": "Absolutely! We specialize in website redesigns and modernizing legacy systems.",
+            "do you create mobile apps?": "Yes, we develop both iOS and Android applications using native and cross-platform technologies.",
+            "what is your expertise in ai?": "Our AI expertise includes machine learning, natural language processing, computer vision, and predictive analytics for business solutions.",
+            "do you offer seo services?": "Yes, we provide comprehensive SEO services to improve your website's visibility and ranking.",
+            "can you help with digital marketing?": "Absolutely! We offer social media marketing, PPC campaigns, content marketing, and email marketing services.",
+            "what payment methods do you accept?": "We accept bank transfers, credit cards, and digital payment platforms.",
+            "do you offer hosting services?": "Yes, we provide reliable hosting solutions with 99.9% uptime and 24/7 monitoring.",
+            "can you migrate my existing site?": "Yes, we offer seamless website migration services with zero downtime.",
+            "do you provide training?": "We offer training sessions to help your team manage and update your digital solutions.",
+            "what technologies do you use?": "We use modern technologies including React, Angular, Vue, Node.js, Python, TensorFlow, and cloud platforms.",
+            "are your websites responsive?": "All our websites are fully responsive and optimized for all devices.",
+            
+            // Nepali questions
             "bhaat khaayou?": "हजुर, म खाना खाइसकेको छु। तपाईंलाई कस्तो छ?",
             "aaja ghumna jaaney ho?": "हजुर, आज म काममा व्यस्त छु।",
             "timilaai kasto chha?": "म ठिक छु, धन्यवाद। तपाईंलाई कसरी सहयोग गर्न सक्छु?",
             "तपाईं कहाँ हुनुहुन्छ?": "हामी काठमाडौं, नेपालमा अवस्थित छौं। तपाईं हामीलाई +९७७ ९७६१७६२०३६ मा फोन गर्न सक्नुहुन्छ वा regmiashish629@gmail.com मा इमेल गर्न सक्नुहुन्छ।",
-            "तपाईंको सेवा कस्तो छ?": "हामीले AI प्रविधि प्रयोग गरेर वेबसाइट, मोबाइल अनुप्रयोग, र डिजिटल समाधानहरू प्रदान गर्छौं। हाम्रो सेवा छिटो, विश्वसनीय र सान्दर्भिक छ।"
+            "तपाईंको सेवा कस्तो छ?": "हामीले AI प्रविधि प्रयोग गरेर वेबसाइट, मोबाइल अनुप्रयोग, र डिजिटल समाधानहरू प्रदान गर्छौं। हाम्रो सेवा छिटो, विश्वसनीय र सान्दर्भिक छ।",
+            "तपाईं कुन क्षेत्रमा सेवा प्रदान गर्नुहुन्छ?": "हामी होटल, यात्रा, इ-कमर्स, शिक्षा, स्वास्थ्य लगायत विभिन्न क्षेत्रहरूमा सेवा प्रदान गर्छौं।",
+            "तपाईंले कस्तो प्रविधि प्रयोग गर्नुहुन्छ?": "हामी React, Angular, Node.js, Python, TensorFlow जस्ता आधुनिक प्रविधिहरू प्रयोग गर्छौं।",
+            "वेबसाइट बनाउन कति खर्च लाग्छ?": "खर्च परियोजनाको जटिलतामा निर्भर गर्दछ। निशुल्क परामर्शबाट हामी सही अनुमान प्रदान गर्न सक्छौं।",
+            "कति समयमा वेबसाइट बनाउन सक्नुहुन्छ?": "सामान्य वेबसाइटहरू २-४ सप्ताहमा बनाउन सकिन्छ। जटिल परियोजनाहरू अतिरिक्त समय लिन सक्छन्।",
+            "तपाईं मोबाइल एप बनाउनुहुन्छ?": "हो, हामी iOS र Android दुवै प्लेटफर्मका लागि मोबाइल अनुप्रयोगहरू विकास गर्छौं।",
+            "तपाईं SEO सेवा प्रदान गर्नुहुन्छ?": "हो, हामीले वेबसाइटको दृश्यता र र्याङ्किङ सुधार्न व्यापक SEO सेवाहरू प्रदान गर्छौं।",
+            "तपाईं डिजिटल मार्केटिङ गर्नुहुन्छ?": "हो, हामी सोशल मिडिया मार्केटिङ, PPC अभियान, सामग्री मार्केटिङ र इमेल मार्केटिङ सेवाहरू प्रदान गर्छौं।",
+            "भुक्तानीको लागि कुन विधि स्वीकार गर्नुहुन्छ?": "हामी बैंक हस्तान्तरण, क्रेडिट कार्ड, र डिजिटल भुक्तानी प्लेटफर्म स्वीकार गर्छौं।",
+            "तपाईं होस्टिङ सेवा प्रदान गर्नुहुन्छ?": "हो, हामी ९९.९% अपटाइम र २४/७ मोनिटरिङको साथ विश्वसनीय होस्टिङ समाधानहरू प्रदान गर्छौं।",
+            "तपाईं मेरो अवस्थित साइट स्थानान्तरण गर्न सक्नुहुन्छ?": "हो, हामी शून्य डाउनटाइमको साथ निर्बाध वेबसाइट स्थानान्तरण सेवाहरू प्रदान गर्छौं।",
+            "तपाईं प्रशिक्षण प्रदान गर्नुहुन्छ?": "हामी तपाईंको टोलीलाई तपाईंको डिजिटल समाधानहरू व्यवस्थापन र अद्यावधिक गर्न मद्दत गर्न प्रशिक्षण सत्रहरू प्रदान गर्छौं।",
+            "तपाईंको वेबसाइटहरू उत्तरदायी छन्?": "हाम्रा सबै वेबसाइटहरू पूर्ण रूपमा उत्तरदायी छन् र सबै उपकरणहरूका लागि अनुकूलित छन्।",
+            "तपाईं AI मा कस्तो विशेषज्ञता राख्नुहुन्छ?": "हाम्रो AI विशेषज्ञतामा व्यवसाय समाधानहरूका लागि मेसिन सिक्ने, प्राकृतिक भाषा प्रशोधन, कम्प्युटर दृष्टि, र भविष्यवाणी विश्लेषण समावेश छ।",
+            "तपाईं मेरो अवस्थित वेबसाइट अद्यावधिक गर्न सक्नुहुन्छ?": "निश्चित रूपमा! हामी वेबसाइट पुनर्डिजाइन र पुरानो प्रणालीहरू आधुनिकीकरण गर्न विशेषज्ञता राख्छौं।",
+            "तपाईं निशुल्क परामर्श प्रदान गर्नुहुन्छ?": "हो! हामी तपाईंको परियोजना आवश्यकताहरू छलफल गर्न र तपाईंको विशिष्ट आवश्यकताहरूको आधारमा सिफारिसहरू प्रदान गर्न निशुल्क प्रारम्भिक परामर्शहरू प्रदान गर्छौं।"
         };
         
         // Send message function
@@ -1976,7 +2032,7 @@
                 
                 // Simulate bot response
                 setTimeout(() => {
-                    let response = "I'm sorry, I didn't understand that. How else can I help you?";
+                    let response = "For more complex inquiries, please email us at support@digisewaai.com or call +977 9761762036.";
                     
                     // Find matching response
                     for (const [key, value] of Object.entries(qaPairs)) {
@@ -2031,12 +2087,12 @@
         Tawk_API.customStyle = {
             visibility: {
                 desktop: {
-                    position: 'br',
+                    position: 'br', // Bottom right
                     x: 20,
                     y: 20
                 },
                 mobile: {
-                    position: 'br',
+                    position: 'br', // Bottom right
                     x: 10,
                     y: 10
                 }
