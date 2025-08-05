@@ -28,6 +28,10 @@
             --gray: #64748b;
             --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
             --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --whatsapp-green: #128C7E;
+            --whatsapp-light: #dcf8c6;
+            --messenger-blue: #0084ff;
+            --messenger-light: #e5f2ff;
         }
         * {
             margin: 0;
@@ -384,7 +388,6 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
         .service-card::before {
             content: '';
@@ -738,7 +741,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLCAwLCAwLCAwLjAyKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
+            background: url('image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgwLCAwLCAwLCAwLjAyKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSIvPjwvc3ZnPg==');
             opacity: 0.3;
             z-index: 0;
         }
@@ -951,6 +954,408 @@
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(24, 119, 242, 0.4);
         }
+        /* Form States */
+        .form-success {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+        .form-loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+        .form-error {
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        /* ====================== */
+        /* CHATBOT CSS STARTS HERE */
+        /* ====================== */
+        
+        /* Chatbot Toggle Button */
+        #chatbot-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99999;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 50px;
+            border: none;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+        
+        #chatbot-toggle.has-notification::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 10px;
+            height: 10px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        
+        #chatbot-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        /* Chatbot Container */
+        #chatbot-container {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 350px;
+            width: 100%;
+            box-shadow: var(--box-shadow);
+            border-radius: 16px;
+            overflow: hidden;
+            display: none;
+            flex-direction: column;
+            height: 500px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        
+        #chatbot-container.active {
+            display: flex;
+            animation: slideUp 0.3s ease forwards;
+        }
+        
+        @keyframes slideUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #chatbot-container {
+                bottom: 80px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-width: calc(100% - 20px);
+                height: 60vh;
+            }
+            
+            #chatbot-toggle {
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+        
+        /* Chatbot Header */
+        .chat-header {
+            background: var(--gradient);
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .chat-header h3 {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chat-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 15px;
+            background: #f0f2f5;
+            overflow-y: auto;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            position: relative;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-message {
+            background: var(--whatsapp-green);
+            color: white;
+            margin-left: auto;
+            border-radius: 18px 18px 4px 18px;
+            align-self: flex-end;
+        }
+        
+        .bot-message {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 18px 18px 18px 4px;
+            align-self: flex-start;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+        }
+        
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        /* Chat Input */
+        .chat-input {
+            display: flex;
+            padding: 12px 15px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            gap: 10px;
+            position: relative;
+            padding-top: 40px; /* Space for FAQ toggle */
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        
+        .chat-input input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        .chat-input button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .chat-input button:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        
+        /* FAQ Buttons */
+        .faq-toggle {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 1;
+        }
+        
+        .faq-toggle:hover {
+            background: #f3f4f6;
+            transform: translateY(-2px);
+        }
+        
+        .faq-container {
+            background: white;
+            padding: 10px;
+            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            display: none;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        
+        .faq-container.active {
+            display: block;
+        }
+        
+        .faq-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 5px 0;
+        }
+        
+        .faq-buttons button {
+            margin: 0;
+            padding: 8px 12px;
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        
+        .faq-buttons button:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-1px);
+        }
+        
+        /* Contact Form */
+        .contact-form-container {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: none;
+        }
+        
+        .contact-form-container.active {
+            display: block;
+        }
+        
+        .form-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        .form-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            width: 100%;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .form-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+        
+        .form-loading {
+            display: none;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .form-success {
+            display: none;
+            background: rgba(46, 204, 113, 0.1);
+            color: #166534;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .form-error {
+            display: none;
+            background: rgba(231, 76, 60, 0.1);
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
         /* Animations */
         @keyframes textGlow {
             0% { text-shadow: 0 0 5px rgba(37, 99, 235, 0.3); }
@@ -1016,6 +1421,10 @@
             .hero-text h1 {
                 font-size: 2.5rem;
             }
+            .hero-subheading {
+                flex-direction: column;
+                gap: 10px;
+            }
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -1079,183 +1488,6 @@
             .testimonial-card {
                 padding: 1rem;
             }
-        }
-        /* Form States */
-        .form-success {
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--primary);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-            display: none;
-        }
-        .form-loading {
-            display: none;
-            text-align: center;
-            padding: 20px;
-        }
-        .form-error {
-            background: rgba(255, 107, 107, 0.9);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-            display: none;
-        }
-        /* Newsletter Form Styles */
-        .newsletter-form {
-            margin-top: 15px;
-        }
-        .newsletter-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: white;
-            font-size: 0.9rem;
-        }
-        .newsletter-form input[type="email"] {
-            width: 100%;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: none;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-            margin-bottom: 10px;
-        }
-        .newsletter-form input[type="email"]:focus {
-            outline: none;
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
-        }
-        .newsletter-form input[type="email"]::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        .newsletter-form button {
-            background: var(--primary);
-            color: white;
-            padding: 12px 20px;
-            font-weight: 600;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            font-size: 1rem;
-        }
-        .newsletter-form button:hover {
-            background: var(--primary-dark);
-        }
-        /* FormSubmit Success/Error Messages */
-        .form-alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
-            display: none;
-            text-align: center;
-        }
-        .form-success-alert {
-            background: rgba(46, 204, 113, 0.9);
-            color: white;
-        }
-        .form-error-alert {
-            background: rgba(231, 76, 60, 0.9);
-            color: white;
-        }
-        
-        /* Chatbot Demo Styling */
-        .chat-demo {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            max-width: 350px;
-            margin: 40px auto;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-        }
-        .chat-header {
-            background: var(--gradient);
-            color: white;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .chat-header i {
-            font-size: 20px;
-        }
-        .chat-header h3 {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin: 0;
-        }
-        .chat-messages {
-            height: 300px;
-            overflow-y: auto;
-            padding: 15px;
-            background: #f8fafc;
-        }
-        .message {
-            margin-bottom: 15px;
-            max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 18px;
-            font-size: 0.9rem;
-            line-height: 1.4;
-        }
-        .bot-message {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 18px 18px 18px 4px;
-            align-self: flex-start;
-        }
-        .user-message {
-            background: var(--primary);
-            color: white;
-            margin-left: auto;
-            border-radius: 18px 18px 4px 18px;
-        }
-        .message-time {
-            font-size: 0.7rem;
-            opacity: 0.7;
-            margin-top: 5px;
-            text-align: right;
-        }
-        .chat-input {
-            display: flex;
-            padding: 15px;
-            background: white;
-            border-top: 1px solid #e2e8f0;
-        }
-        .chat-input input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #e2e8f0;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            outline: none;
-        }
-        .chat-input button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 42px;
-            height: 42px;
-            margin-left: 10px;
-            cursor: pointer;
-        }
-        .chat-demo-notice {
-            text-align: center;
-            font-size: 0.85rem;
-            color: var(--gray);
-            padding: 15px;
-            background: #f8fafc;
-            border-top: 1px solid #e2e8f0;
         }
     </style>
 </head>
@@ -1496,66 +1728,6 @@
             </div>
         </div>
     </section>
-    <!-- Chatbot Demo Section -->
-    <section class="testimonials" id="chatbot-demo">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our AI Chat Assistant</h2>
-                <p class="subtitle">Available 24/7 to answer your questions in English or Nepali</p>
-            </div>
-            <div class="chat-demo">
-                <div class="chat-header">
-                    <i class="fas fa-robot"></i>
-                    <h3>DigiSewa AI Assistant</h3>
-                </div>
-                <div class="chat-messages">
-                    <div class="message bot-message">
-                        👋 नमस्ते! तपाईंलाई कसरी सहयोग गर्न सक्छौं?
-                        <div class="message-time">Just now</div>
-                    </div>
-                    <div class="message user-message">
-                        What is DigiSewa AI?
-                        <div class="message-time">Just now</div>
-                    </div>
-                    <div class="message bot-message">
-                        DigiSewa AI provides premium AI-powered technical solutions including web development, app creation, and digital transformation services tailored for businesses in Nepal.
-                        <div class="message-time">Just now</div>
-                    </div>
-                    <div class="message user-message">
-                        तपाईं कहाँ हुनुहुन्छ?
-                        <div class="message-time">Just now</div>
-                    </div>
-                    <div class="message bot-message">
-                        हामी काठमाडौं, नेपालमा अवस्थित छौं। तपाईं हामीलाई +९७७ ९७६१७६२०३६ मा फोन गर्न सक्नुहुन्छ वा regmiashish629@gmail.com मा इमेल गर्न सक्नुहुन्छ।
-                        <div class="message-time">Just now</div>
-                    </div>
-                    <div class="message user-message">
-                        How much do your services cost?
-                        <div class="message-time">Just now</div>
-                    </div>
-                    <div class="message bot-message">
-                        Our pricing is tailored to each project's requirements. We offer free consultations to provide accurate estimates based on your specific needs.
-                        <div class="message-time">Just now</div>
-                    </div>
-                    <div class="message user-message">
-                        कति समयमा वेबसाइट बनाउन सक्नुहुन्छ?
-                        <div class="message-time">Just now</div>
-                    </div>
-                    <div class="message bot-message">
-                        सामान्य वेबसाइटहरू २-४ सप्ताहमा बनाउन सकिन्छ। जटिल परियोजनाहरू अतिरिक्त समय लिन सक्छन्।
-                        <div class="message-time">Just now</div>
-                    </div>
-                </div>
-                <div class="chat-input">
-                    <input type="text" placeholder="Type your message...">
-                    <button><i class="fas fa-paper-plane"></i></button>
-                </div>
-                <div class="chat-demo-notice">
-                    This is a demo. Our actual chatbot supports 200+ questions in English and Nepali.
-                </div>
-            </div>
-        </div>
-    </section>
     <!-- Testimonials Section - FIXED -->
     <section class="testimonials" id="testimonials">
         <div class="container">
@@ -1624,7 +1796,10 @@
             <h2>LIMITED TIME OFFER – FREE CONSULTATION</h2>
             <p>Don't miss your chance to begin your digital journey with us. Our experts are ready to discuss your project.</p>
             <div class="form-container">
-                <form id="digisewa-form">
+                <form id="digisewa-form" action="https://formsubmit.co/1a5975310147323f13df75049fd9ca80" method="POST">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_subject" value="New submission from DigiSewa!">
+                    <input type="hidden" name="_next" value="https://digisewa-ai.netlify.app/thankyou.html">
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="name">Full Name *</label>
@@ -1786,6 +1961,91 @@
             </div>
         </div>
     </footer>
+    
+    <!-- ====================== -->
+    <!-- CHATBOT HTML STARTS HERE -->
+    <!-- ====================== -->
+    
+    <!-- Chatbot Toggle Button -->
+    <button id="chatbot-toggle">
+        <i class="fas fa-comment-dots"></i> Chat with us
+    </button>
+
+    <!-- Chatbot Container -->
+    <div id="chatbot-container">
+        <div class="chat-header">
+            <h3><i class="fas fa-robot"></i> DigiSewa AI Assistant</h3>
+            <button class="chat-close" id="chatbot-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="chat-area" id="chat-area">
+            <!-- Messages will be added here dynamically -->
+            <div class="message bot-message">
+                नमस्ते! 👋 I'm DigiSewa AI Assistant. How can I help you today?
+                <div class="message-time" id="current-time"></div>
+            </div>
+        </div>
+        
+        <div class="faq-container" id="faq-container">
+            <div class="faq-buttons">
+                <button onclick="sendQuestion('location')">Where are you located?</button>
+                <button onclick="sendQuestion('price kati ho?')">How much do services cost?</button>
+                <button onclick="sendQuestion('ke sewa dinchhau?')">What services do you offer?</button>
+                <button onclick="sendQuestion('kati samay lagchha?')">How long do projects take?</button>
+                <button onclick="sendQuestion('timro naam ke ho?')">Who are you?</button>
+                <button onclick="sendQuestion('How can I contact you?')">Contact options</button>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <button class="faq-toggle" id="faq-toggle">
+                <i class="fas fa-comments"></i> Quick Questions
+            </button>
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+        
+        <div class="contact-form-container" id="contact-form-container">
+            <div class="form-title">Let's get in touch!</div>
+            <form id="contact-form" action="https://formsubmit.co/1a5975310147323f13df75049fd9ca80" method="POST">
+                <input type="hidden" name="_subject" value="New Chatbot Contact Request">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="https://digisewa-ai.netlify.app/thank-you.html">
+                
+                <div class="form-group">
+                    <label for="contact-name">Full Name</label>
+                    <input type="text" id="contact-name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-email">Email Address</label>
+                    <input type="email" id="contact-email" name="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact-message">Your Message</label>
+                    <textarea id="contact-message" name="message" rows="3" required></textarea>
+                </div>
+                
+                <button type="submit" class="form-submit">Send Message</button>
+                
+                <div class="form-loading" id="form-loading-chat">
+                    <i class="fas fa-spinner fa-spin"></i> Sending your message...
+                </div>
+                <div class="form-success" id="form-success-chat">
+                    <i class="fas fa-check-circle"></i> Message sent successfully!
+                </div>
+                <div class="form-error" id="form-error-chat">
+                    <i class="fas fa-exclamation-circle"></i> Failed to send message. Please try again.
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <script>
         // Mobile Menu Toggle
         const mobileMenu = document.querySelector('.mobile-menu');
@@ -1898,7 +2158,7 @@
                 _captcha: 'false'
             };
             // Submit to FormSubmit
-            fetch('https://formsubmit.co/ajax/regmiashish629@gmail.com', {
+            fetch('https://formsubmit.co/ajax/1a5975310147323f13df75049fd9ca80', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -1962,22 +2222,34 @@
             this.submit();
         });
         
-        // Chatbot demo functionality
-        const chatMessages = document.querySelector('.chat-messages');
-        const chatInput = document.querySelector('.chat-input input');
-        const chatSendBtn = document.querySelector('.chat-input button');
+        /* ====================== */
+        /* CHATBOT JS STARTS HERE */
+        /* ====================== */
+        
+        // DOM Elements
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        const chatbotContainer = document.getElementById('chatbot-container');
+        const chatbotClose = document.getElementById('chatbot-close');
+        const chatArea = document.getElementById('chat-area');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const faqToggle = document.getElementById('faq-toggle');
+        const faqContainer = document.getElementById('faq-container');
+        const contactFormContainer = document.getElementById('contact-form-container');
+        const contactForm = document.getElementById('contact-form');
+        const formLoadingChat = document.getElementById('form-loading-chat');
+        const formSuccessChat = document.getElementById('form-success-chat');
+        const formErrorChat = document.getElementById('form-error-chat');
         
         // Predefined Q&A in both languages
         const qaPairs = {
             // English questions
             "what is digisewa ai?": "DigiSewa AI provides premium AI-powered technical solutions including web development, app creation, and digital transformation services tailored for businesses in Nepal.",
-            "how can i contact support?": "You can contact our support team via email at support@digisewaai.com, call us at +977 9761762036, or use our contact form.",
+            "how can i contact you?": "You can contact our support team via email at regmiashish629@gmail.com, call us at +977 9761762036, or use our contact form below.",
             "how does your service work?": "We start with a free consultation to understand your needs, then create a customized solution using the latest technologies. Our process includes design, development, testing, and deployment.",
             "what services do you offer?": "We specialize in AI solutions, web development, mobile apps, e-commerce, digital marketing, and custom software solutions.",
             "do you offer free consultations?": "Yes! We offer free initial consultations to discuss your project requirements and provide recommendations.",
-            "how much do your services cost?": "Our pricing is tailored to each project's requirements. We offer free consultations to provide accurate estimates based on your specific needs.",
             "what industries do you serve?": "We serve various industries including hospitality, travel, e-commerce, education, healthcare, and more.",
-            "how long does a project take?": "Project timelines vary based on complexity. Simple websites take 2-4 weeks, while complex applications may take 3-6 months.",
             "do you provide maintenance?": "Yes, we offer ongoing maintenance and support packages to keep your digital solutions running smoothly.",
             "can you update my existing website?": "Absolutely! We specialize in website redesigns and modernizing legacy systems.",
             "do you create mobile apps?": "Yes, we develop both iOS and Android applications using native and cross-platform technologies.",
@@ -2011,109 +2283,284 @@
             "तपाईंको वेबसाइटहरू उत्तरदायी छन्?": "हाम्रा सबै वेबसाइटहरू पूर्ण रूपमा उत्तरदायी छन् र सबै उपकरणहरूका लागि अनुकूलित छन्।",
             "तपाईं AI मा कस्तो विशेषज्ञता राख्नुहुन्छ?": "हाम्रो AI विशेषज्ञतामा व्यवसाय समाधानहरूका लागि मेसिन सिक्ने, प्राकृतिक भाषा प्रशोधन, कम्प्युटर दृष्टि, र भविष्यवाणी विश्लेषण समावेश छ।",
             "तपाईं मेरो अवस्थित वेबसाइट अद्यावधिक गर्न सक्नुहुन्छ?": "निश्चित रूपमा! हामी वेबसाइट पुनर्डिजाइन र पुरानो प्रणालीहरू आधुनिकीकरण गर्न विशेषज्ञता राख्छौं।",
-            "तपाईं निशुल्क परामर्श प्रदान गर्नुहुन्छ?": "हो! हामी तपाईंको परियोजना आवश्यकताहरू छलफल गर्न र तपाईंको विशिष्ट आवश्यकताहरूको आधारमा सिफारिसहरू प्रदान गर्न निशुल्क प्रारम्भिक परामर्शहरू प्रदान गर्छौं।"
+            "तपाईं निशुल्क परामर्श प्रदान गर्नुहुन्छ?": "हो! हामी तपाईंको परियोजना आवश्यकताहरू छलफल गर्न र तपाईंको विशिष्ट आवश्यकताहरूको आधारमा सिफारिसहरू प्रदान गर्न निशुल्क प्रारम्भिक परामर्शहरू प्रदान गर्छौं।",
+            
+            // Location-related
+            "location": "We are based in Kathmandu, Nepal.",
+            "timro location?": "We are based in Kathmandu, Nepal.",
+            "hajurko location": "We are based in Kathmandu, Nepal.",
+            "kaha chhau?": "We are based in Kathmandu, Nepal.",
+            "where is your office?": "We are based in Kathmandu, Nepal.",
+            
+            // Pricing/cost
+            "cost?": "Pricing depends on project scope. Simple websites start at $500.",
+            "price kati ho?": "Pricing depends on project scope. Simple websites start at $500.",
+            "kati parchha?": "Pricing depends on project scope. Simple websites start at $500.",
+            "how much?": "Pricing depends on project scope. Simple websites start at $500.",
+            "services ko rate?": "Pricing depends on project scope. Simple websites start at $500.",
+            
+            // Services
+            "ke sewa dinchhau?": "We provide Web Development, AI Integration, Mobile Apps, and more.",
+            "services?": "We provide Web Development, AI Integration, Mobile Apps, and more.",
+            "tapaiharu le ke ke garchhau?": "We provide Web Development, AI Integration, Mobile Apps, and more.",
+            "what do you offer?": "We provide Web Development, AI Integration, Mobile Apps, and more.",
+            
+            // Timeframe
+            "kati samay lagchha?": "Simple websites take 2–4 weeks. Complex apps take longer.",
+            "how long?": "Simple websites take 2–4 weeks. Complex apps take longer.",
+            "project time?": "Simple websites take 2–4 weeks. Complex apps take longer.",
+            "samay kati?": "Simple websites take 2–4 weeks. Complex apps take longer.",
+            
+            // Identity
+            "timro naam ke ho?": "I’m DigiSewa AI Assistant, your digital helper.",
+            "who are you?": "I’m DigiSewa AI Assistant, your digital helper.",
+            "your name?": "I’m DigiSewa AI Assistant, your digital helper.",
+            "parichaya dinus": "I’m DigiSewa AI Assistant, your digital helper.",
+            
+            // Casual/Fun inputs (fallback)
+            "k khana khaayau?": "I'm here to help you with digital services. For more, contact us directly.",
+            "ghumna jaaney?": "I'm here to help you with digital services. For more, contact us directly.",
+            "hello": "I'm here to help you with digital services. For more, contact us directly.",
+            "uffff": "I'm here to help you with digital services. For more, contact us directly."
         };
         
-        // Send message function
-        function sendMessage() {
-            const message = chatInput.value.trim().toLowerCase();
-            if (message) {
-                // Add user message
-                const userMessageEl = document.createElement('div');
-                userMessageEl.className = 'message user-message';
-                userMessageEl.innerHTML = `${message}<div class="message-time">Just now</div>`;
-                chatMessages.appendChild(userMessageEl);
-                
-                // Clear input
-                chatInput.value = '';
-                
-                // Scroll to bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                // Simulate bot response
-                setTimeout(() => {
-                    let response = "For more complex inquiries, please email us at support@digisewaai.com or call +977 9761762036.";
-                    
-                    // Find matching response
-                    for (const [key, value] of Object.entries(qaPairs)) {
-                        if (message.includes(key)) {
-                            response = value;
-                            break;
-                        }
-                    }
-                    
-                    // Add bot response
-                    const botMessageEl = document.createElement('div');
-                    botMessageEl.className = 'message bot-message';
-                    botMessageEl.innerHTML = `${response}<div class="message-time">Just now</div>`;
-                    chatMessages.appendChild(botMessageEl);
-                    
-                    // Scroll to bottom
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 1000);
-            }
-        }
+        // Fallback management
+        let consecutiveFallbacks = 0;
+        const MAX_CONSECUTIVE_FALLBACKS = 2;
         
-        // Event listeners for chat
-        chatSendBtn.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
+        // Initialize chatbot with greeting
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                // Set initial time
+                document.getElementById('current-time').textContent = getCurrentTime();
+            }, 1000);
+        });
+        
+        // Toggle chatbot visibility
+        chatbotToggle.addEventListener('click', function() {
+            if (chatbotContainer.classList.contains('active')) {
+                chatbotContainer.classList.remove('active');
+            } else {
+                chatbotContainer.classList.add('active');
+                // Remove notification dot
+                chatbotToggle.classList.remove('has-notification');
+                // Scroll to bottom when opened
+                setTimeout(scrollToBottom, 100);
+            }
+        });
+        
+        // Close chatbot
+        chatbotClose.addEventListener('click', function() {
+            chatbotContainer.classList.remove('active');
+        });
+        
+        // Toggle FAQ container
+        faqToggle.addEventListener('click', function() {
+            faqContainer.classList.toggle('active');
+            // Scroll to bottom when FAQ is toggled
+            setTimeout(scrollToBottom, 100);
+        });
+        
+        // Send message when button is clicked
+        sendButton.addEventListener('click', sendMessage);
+        
+        // Send message when Enter key is pressed
+        userInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 sendMessage();
             }
         });
-    </script>
-    <!-- Tawk.to Chat Widget -->
-    <script type="text/javascript">
-        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-        (function() {
-            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/6656b1b81ec1082f04e1e7b8/default';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-            
-            // Set custom attributes after the widget loads
-            Tawk_API.onLoad = function() {
-                Tawk_API.setAttributes({
-                    'name': 'Visitor',
-                    'email': 'visitor@example.com',
-                    'hash': 'hash'
-                }, function(error) {});
-            };
-        })();
         
-        // Customize the chat widget
-        Tawk_API.customStyle = {
-            visibility: {
-                desktop: {
-                    position: 'br', // Bottom right
-                    x: 20,
-                    y: 20
-                },
-                mobile: {
-                    position: 'br', // Bottom right
-                    x: 10,
-                    y: 10
-                }
-            },
-            theme: {
-                color: '#2563eb',
-                icon: {
-                    type: 'default',
-                    position: 'br',
-                    imageUrl: ''
-                },
-                chat: {
-                    hideInput: false,
-                    placeholder: 'Type your message...'
-                },
-                title: {
-                    text: 'DigiSewa AI Assistant',
-                    background: '#2563eb'
+        // Auto-scroll to bottom
+        function scrollToBottom() {
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+        
+        // Add user message to chat
+        function addUserMessage(text) {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message user-message';
+            messageEl.innerHTML = `
+                ${escapeHtml(text)}
+                <div class="message-time">${getCurrentTime()}</div>
+            `;
+            chatArea.appendChild(messageEl);
+            scrollToBottom();
+        }
+        
+        // Add bot message to chat
+        function addBotMessage(text) {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message bot-message';
+            messageEl.innerHTML = `
+                ${text}
+                <div class="message-time">${getCurrentTime()}</div>
+            `;
+            chatArea.appendChild(messageEl);
+            scrollToBottom();
+            
+            // Add notification if chat is closed
+            if (!chatbotContainer.classList.contains('active')) {
+                chatbotToggle.classList.add('has-notification');
+            }
+        }
+        
+        // Get current time in HH:MM format
+        function getCurrentTime() {
+            const now = new Date();
+            return now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+        }
+        
+        // Escape HTML special characters
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+        
+        // Send message function
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                // Add user message
+                addUserMessage(message);
+                
+                // Clear input
+                userInput.value = '';
+                
+                // Hide FAQ container
+                faqContainer.classList.remove('active');
+                
+                // Process the message
+                processMessage(message);
+            }
+        }
+        
+        // Process user message and generate response
+        function processMessage(message) {
+            const lowerMessage = message.toLowerCase();
+            let response = null;
+            
+            // Check for direct matches in qaPairs
+            for (const [key, value] of Object.entries(qaPairs)) {
+                if (lowerMessage.includes(key)) {
+                    response = value;
+                    break;
                 }
             }
-        };
+            
+            // Context-based matching if direct match not found
+            if (!response) {
+                // Location context
+                if (/(location|kaha|office)/i.test(lowerMessage)) {
+                    response = "We are based in Kathmandu, Nepal.";
+                } 
+                // Pricing context
+                else if (/(cost|price|kati|parchha|rate)/i.test(lowerMessage)) {
+                    response = "Pricing depends on project scope. Simple websites start at $500.";
+                }
+                // Services context
+                else if (/(service|sewa|offer|garchhau)/i.test(lowerMessage)) {
+                    response = "We provide Web Development, AI Integration, Mobile Apps, and more.";
+                }
+                // Timeframe context
+                else if (/(time|samay|lagchha|long)/i.test(lowerMessage)) {
+                    response = "Simple websites take 2–4 weeks. Complex apps take longer.";
+                }
+                // Identity context
+                else if (/(name|naam|who|parichaya)/i.test(lowerMessage)) {
+                    response = "I’m DigiSewa AI Assistant, your digital helper.";
+                }
+            }
+            
+            // Fallback handling
+            if (!response) {
+                if (consecutiveFallbacks < MAX_CONSECUTIVE_FALLBACKS) {
+                    response = "I'm here to help you with digital services. For more, contact us directly.";
+                    consecutiveFallbacks++;
+                } else if (consecutiveFallbacks === MAX_CONSECUTIVE_FALLBACKS) {
+                    response = "I'm still having trouble understanding. For immediate assistance, please call us at +977 9761762036 or email regmiashish629@gmail.com.";
+                    consecutiveFallbacks++;
+                } else {
+                    // Skip responding after max consecutive fallbacks
+                    return;
+                }
+            } else {
+                // Reset counter when valid response found
+                consecutiveFallbacks = 0;
+            }
+            
+            // Check if it's a contact request
+            if (/(contact|call|email|phone|सम्पर्क|फोन|इमेल)/i.test(lowerMessage)) {
+                // Show contact form
+                contactFormContainer.classList.add('active');
+                setTimeout(() => {
+                    addBotMessage(response);
+                    scrollToBottom();
+                }, 300);
+                return;
+            }
+            
+            // Add bot response with slight delay
+            setTimeout(() => {
+                addBotMessage(response);
+            }, 500);
+        }
+        
+        // Send predefined question
+        function sendQuestion(text) {
+            userInput.value = text;
+            sendMessage();
+        }
+        
+        // Contact form submission handling
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            formLoadingChat.style.display = 'block';
+            formSuccessChat.style.display = 'none';
+            formErrorChat.style.display = 'none';
+            
+            // Get form data
+            const formData = new FormData(contactForm);
+            
+            // Submit to FormSubmit
+            fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Reset form
+                    contactForm.reset();
+                    
+                    // Show success message
+                    formLoadingChat.style.display = 'none';
+                    formSuccessChat.style.display = 'block';
+                    
+                    // Hide form after success
+                    setTimeout(() => {
+                        contactFormContainer.classList.remove('active');
+                        addBotMessage("Thank you! We'll contact you shortly.");
+                    }, 2000);
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            })
+            .catch(error => {
+                // Show error message
+                formLoadingChat.style.display = 'none';
+                formErrorChat.style.display = 'block';
+                console.error('Form submission error:', error);
+            });
+        });
     </script>
 </body>
 </html>
