@@ -1,0 +1,614 @@
+/* ====================== */
+/* RESPONSIVE CSS */
+/* ====================== */
+
+/* Horizontal Scroll Prevention - Base */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
+
+@media (max-width: 1200px) {
+    .container {
+        max-width: 1140px;
+        padding: 0 20px;
+    }
+    
+    .hero-text h1 {
+        font-size: 3.2rem;
+    }
+    
+    .tech-word {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 960px;
+        padding: 0 20px;
+    }
+    
+    .hero-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .hero-text {
+        padding-right: 0;
+        margin-bottom: 50px;
+        width: 100%;
+    }
+    
+    .hero-subheading {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .why-container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .why-image {
+        order: -1;
+        max-width: 100%;
+    }
+    
+    .logos-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
+    
+    .contact-options {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    
+    /* Horizontal scroll prevention */
+    .service-card,
+    .point,
+    .stat,
+    .contact-option {
+        max-width: 100%;
+        margin: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 720px;
+        padding: 0 15px;
+    }
+    
+    .mobile-menu {
+        display: block;
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1000;
+        min-height: 44px;
+        min-width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .nav-links {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background: white;
+        flex-direction: column;
+        align-items: center;
+        padding: 50px 0;
+        transition: all 0.4s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+    }
+    
+    .nav-links.active {
+        left: 0;
+    }
+    
+    .nav-links li {
+        margin: 15px 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-links a {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 20px;
+    }
+    
+    .hero-text h1 {
+        font-size: 2.5rem;
+        line-height: 1.2;
+    }
+    
+    .hero-subheading {
+        flex-direction: column;
+        gap: 10px;
+        font-size: 1.1rem;
+    }
+    
+    .simple-form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .simple-form-full {
+        grid-column: span 1;
+    }
+    
+    .swiper {
+        height: 300px;
+        max-width: 100%;
+    }
+    
+    .slide-content {
+        left: 20px;
+        bottom: 20px;
+        max-width: 90%;
+    }
+    
+    .slide-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .social-links a {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+    
+    .logos-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    
+    .logo-text {
+        font-size: 22px;
+    }
+    
+    .whatsapp-float {
+        bottom: 85px;
+        right: 15px;
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .service-card {
+        margin: 0 10px;
+        min-height: auto;
+        padding: 30px 20px;
+    }
+    
+    .stats-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+    
+    .stat {
+        padding: 30px 15px;
+    }
+    
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .form-container {
+        padding: 30px 20px;
+    }
+    
+    /* Horizontal scroll prevention for mobile */
+    body, html {
+        overflow-x: hidden;
+        max-width: 100%;
+    }
+    
+    .hero::before,
+    .hero::after,
+    .services::before,
+    .why-us::before,
+    .achievements::before {
+        max-width: 100vw;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        max-width: 540px;
+        padding: 0 15px;
+    }
+    
+    .hero-text h1 {
+        font-size: 2.2rem;
+    }
+    
+    .section-title h2 {
+        font-size: 2rem;
+    }
+    
+    .btn, .btn-primary, .btn-premium {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    .hero-animation {
+        max-width: 100%;
+    }
+    
+    .tech-animation {
+        max-width: 100%;
+        height: 150px;
+    }
+    
+    .tech-word {
+        font-size: 1.8rem;
+    }
+    
+    .newsletter-input-group {
+        flex-direction: column;
+    }
+    
+    .newsletter-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .hero {
+        padding: 70px 0 30px;
+        min-height: 80vh;
+    }
+    
+    .hero-text h1 {
+        font-size: 2rem;
+        line-height: 1.3;
+    }
+    
+    .hero-subheading {
+        flex-direction: column;
+        gap: 10px;
+        font-size: 1.1rem;
+    }
+    
+    .section-title h2 {
+        font-size: 1.8rem;
+    }
+    
+    .section-title .subtitle {
+        font-size: 1rem;
+    }
+    
+    .brand-statement p {
+        font-size: 1.4rem;
+        line-height: 1.4;
+    }
+    
+    .consultation h2 {
+        font-size: 2rem;
+    }
+    
+    .form-container {
+        padding: 25px 15px;
+    }
+    
+    .tech-word {
+        font-size: 1.6rem;
+    }
+    
+    .logos-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .client-logo {
+        height: 70px;
+    }
+    
+    .logo-text {
+        font-size: 20px;
+    }
+    
+    .hero-text p {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+    
+    .service-card, .point {
+        min-height: auto;
+        padding: 25px 15px;
+    }
+    
+    .point {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .point-icon {
+        margin: 0 auto;
+    }
+    
+    .whatsapp-float {
+        bottom: 80px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .stats-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+    }
+    
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+    
+    .footer-col {
+        text-align: center;
+    }
+    
+    .footer-col h3::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .contact-info li {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .social-links {
+        justify-content: center;
+    }
+    
+    /* Extra horizontal scroll protection for small devices */
+    * {
+        max-width: 100%;
+    }
+    
+    img, video, iframe {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 375px) {
+    .container {
+        padding: 0 8px;
+    }
+    
+    .hero-text h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero-text p {
+        font-size: 1rem;
+    }
+    
+    .section-title h2 {
+        font-size: 1.6rem;
+    }
+    
+    .brand-statement p {
+        font-size: 1.2rem;
+    }
+    
+    .service-card {
+        padding: 20px 12px;
+    }
+    
+    .stat {
+        padding: 25px 12px;
+    }
+    
+    .logo-text {
+        font-size: 18px;
+    }
+    
+    .tech-word {
+        font-size: 1.4rem;
+    }
+    
+    .whatsapp-float {
+        bottom: 75px;
+        right: 10px;
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
+/* ====================== */
+/* ORIENTATION SPECIFIC */
+/* ====================== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: 100vh;
+        padding: 80px 0 40px;
+    }
+    
+    .nav-links {
+        height: calc(100vh - 60px);
+        padding: 20px 0;
+    }
+    
+    .nav-links li {
+        margin: 10px 0;
+    }
+    
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+    
+    .tech-animation {
+        height: 120px;
+    }
+}
+
+/* ====================== */
+/* HIGH DPI SCREENS */
+/* ====================== */
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .logo {
+        image-rendering: -webkit-optimize-contrast;
+    }
+}
+
+/* ====================== */
+/* PRINT STYLES */
+/* ====================== */
+
+@media print {
+    .whatsapp-float,
+    .mobile-menu,
+    .btn-premium {
+        display: none !important;
+    }
+    
+    .hero {
+        background: #667eea !important;
+        color: black !important;
+    }
+    
+    .hero-text h1 {
+        background: none !important;
+        color: black !important;
+        text-shadow: none !important;
+    }
+}
+
+/* ====================== */
+/* REDUCED MOTION */
+/* ====================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .hero::before,
+    .hero::after {
+        animation: none;
+    }
+    
+    .tech-word {
+        animation: none;
+        opacity: 1;
+    }
+    
+    .service-card:hover,
+    .point:hover,
+    .stat:hover {
+        transform: none;
+    }
+}
+
+/* ====================== */
+/* DARK MODE SUPPORT */
+/* ====================== */
+
+@media (prefers-color-scheme: dark) {
+    /* Base dark mode styles if needed */
+    body {
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        color: #f8fafc;
+    }
+}
+
+/* ====================== */
+/* TOUCH DEVICE OPTIMIZATIONS */
+/* ====================== */
+
+@media (hover: none) and (pointer: coarse) {
+    .service-card:hover,
+    .point:hover,
+    .stat:hover,
+    .contact-option:hover {
+        transform: none;
+    }
+    
+    .nav-links a:hover::after {
+        width: 0;
+    }
+    
+    .btn-primary:hover,
+    .btn-premium:hover {
+        transform: none;
+    }
+}
+
+/* ====================== */
+/* VERY SMALL HEIGHT DEVICES */
+/* ====================== */
+
+@media (max-height: 600px) and (max-width: 768px) {
+    .hero {
+        min-height: 100vh;
+        padding: 80px 0 30px;
+    }
+    
+    .hero-text h1 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+    
+    .hero-text p {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
+    
+    .tech-animation {
+        height: 120px;
+    }
+    
+    .tech-word {
+        font-size: 1.5rem;
+    }
+}
