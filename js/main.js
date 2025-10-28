@@ -15,21 +15,62 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Mobile Menu Toggle
+    // Mobile Menu Toggle - ENHANCED VERSION
     const mobileMenu = document.querySelector('.mobile-menu');
     const navLinks = document.querySelector('.nav-links');
-    
+    const closeMobileMenu = document.querySelector('.close-mobile-menu');
+
+    // Create overlay element
+    const navOverlay = document.createElement('div');
+    navOverlay.className = 'nav-overlay';
+    document.body.appendChild(navOverlay);
+
     if (mobileMenu) {
-        mobileMenu.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
+        mobileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navLinks.classList.add('active');
+            navOverlay.classList.add('active');
+            document.body.classList.add('menu-open');
         });
     }
+
+    // Close menu when clicking on close button
+    if (closeMobileMenu) {
+        closeMobileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeMobileMenuFunction();
+        });
+    }
+
+    // Close menu when clicking on overlay
+    navOverlay.addEventListener('click', closeMobileMenuFunction);
 
     // Close menu when clicking on a link
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
+            closeMobileMenuFunction();
         });
+    });
+
+    // Close menu function
+    function closeMobileMenuFunction() {
+        navLinks.classList.remove('active');
+        navOverlay.classList.remove('active');
+        document.body.classList.remove('menu-open');
+    }
+
+    // Close menu when pressing Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+            closeMobileMenuFunction();
+        }
+    });
+
+    // Close menu when window is resized to desktop size
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+            closeMobileMenuFunction();
+        }
     });
 
     // Initialize Swiper for Expertise Section
