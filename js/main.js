@@ -15,15 +15,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Mobile Menu Toggle - ENHANCED VERSION
+    // ======================
+    // ENHANCED MOBILE MENU - FIXED VERSION
+    // ======================
+
+    // Mobile Menu Toggle - FIXED VERSION
     const mobileMenu = document.querySelector('.mobile-menu');
     const navLinks = document.querySelector('.nav-links');
     const closeMobileMenu = document.querySelector('.close-mobile-menu');
 
-    // Create overlay element
-    const navOverlay = document.createElement('div');
-    navOverlay.className = 'nav-overlay';
-    document.body.appendChild(navOverlay);
+    // Create overlay element if it doesn't exist
+    let navOverlay = document.querySelector('.nav-overlay');
+    if (!navOverlay) {
+        navOverlay = document.createElement('div');
+        navOverlay.className = 'nav-overlay';
+        document.body.appendChild(navOverlay);
+    }
 
     if (mobileMenu) {
         mobileMenu.addEventListener('click', (e) => {
