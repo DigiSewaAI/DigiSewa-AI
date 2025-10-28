@@ -52,6 +52,26 @@ html {
     }
 }
 
+/* ====================== */
+/* DESKTOP MOBILE MENU HIDING */
+/* ====================== */
+
+/* Hide mobile menu completely on desktop */
+@media (min-width: 769px) {
+    .mobile-menu-container {
+        display: none !important;
+    }
+    
+    .mobile-menu {
+        display: none !important;
+    }
+    
+    /* Show desktop navigation */
+    .nav-links {
+        display: flex !important;
+    }
+}
+
 @media (max-width: 1200px) {
     .container {
         max-width: 1140px;
@@ -286,6 +306,11 @@ html {
     }
     
     .close-mobile-menu {
+        display: none !important;
+    }
+    
+    /* Hide desktop navigation on mobile */
+    .nav-links {
         display: none !important;
     }
     
