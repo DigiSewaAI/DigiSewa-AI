@@ -16,15 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ======================
-    // ENHANCED MOBILE MENU - FIXED VERSION
+    // OPTIMIZED MOBILE MENU - FIXED VERSION
     // ======================
 
-    // Mobile Menu Toggle - FIXED VERSION
     const mobileMenu = document.querySelector('.mobile-menu');
     const navLinks = document.querySelector('.nav-links');
     const closeMobileMenu = document.querySelector('.close-mobile-menu');
+    const body = document.body;
 
-    // Create overlay element if it doesn't exist
+    // Create or get overlay element
     let navOverlay = document.querySelector('.nav-overlay');
     if (!navOverlay) {
         navOverlay = document.createElement('div');
@@ -32,16 +32,15 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.appendChild(navOverlay);
     }
 
+    // Open mobile menu
     if (mobileMenu) {
         mobileMenu.addEventListener('click', (e) => {
             e.stopPropagation();
-            navLinks.classList.add('active');
-            navOverlay.classList.add('active');
-            document.body.classList.add('menu-open');
+            openMobileMenu();
         });
     }
 
-    // Close menu when clicking on close button
+    // Close mobile menu
     if (closeMobileMenu) {
         closeMobileMenu.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -54,31 +53,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Close menu when clicking on a link
     document.querySelectorAll('.nav-links a').forEach(link => {
-        link.addEventListener('click', () => {
-            closeMobileMenuFunction();
-        });
+        link.addEventListener('click', closeMobileMenuFunction);
     });
 
-    // Close menu function
-    function closeMobileMenuFunction() {
-        navLinks.classList.remove('active');
-        navOverlay.classList.remove('active');
-        document.body.classList.remove('menu-open');
-    }
-
-    // Close menu when pressing Escape key
+    // Close menu with Escape key
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && navLinks.classList.contains('active')) {
             closeMobileMenuFunction();
         }
     });
 
-    // Close menu when window is resized to desktop size
+    // Close menu on resize to desktop
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
             closeMobileMenuFunction();
         }
     });
+
+    function openMobileMenu() {
+        navLinks.classList.add('active');
+        navOverlay.classList.add('active');
+        body.classList.add('menu-open');
+        
+        // Prevent body scroll
+        document.documentElement.style.overflow = 'hidden';
+        body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenuFunction() {
+        navLinks.classList.remove('active');
+        navOverlay.classList.remove('active');
+        body.classList.remove('menu-open');
+        
+        // Restore body scroll
+        document.documentElement.style.overflow = '';
+        body.style.overflow = '';
+    }
 
     // Initialize Swiper for Expertise Section
     const expertiseSwiper = new Swiper('.slider-section .swiper', {

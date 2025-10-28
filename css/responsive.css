@@ -97,7 +97,7 @@ html, body {
         right: 1rem;
         top: 50%;
         transform: translateY(-50%);
-        z-index: 10004; /* Highest - always clickable */
+        z-index: 1001;
         min-height: 44px;
         min-width: 44px;
         align-items: center;
@@ -122,15 +122,11 @@ html, body {
         transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
         overflow-y: auto;
-        z-index: 10002; /* Higher than hero and particles */
+        z-index: 10002; /* Updated z-index */
     }
     
     .nav-links.active {
         left: 0;
-        /* Force visibility */
-        visibility: visible !important;
-        opacity: 1 !important;
-        transform: none !important;
     }
     
     .nav-links li {
@@ -185,7 +181,6 @@ html, body {
         font-size: 20px;
         cursor: pointer;
         transition: var(--transition-smooth);
-        z-index: 10003; /* Higher than menu */
     }
     
     .close-mobile-menu:hover {
@@ -202,16 +197,10 @@ html, body {
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        z-index: 10001; /* Between menu and content */
+        z-index: 10001; /* Updated z-index */
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
-        /* Ensure it covers entire viewport */
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
     }
     
     .nav-overlay.active {
@@ -222,27 +211,6 @@ html, body {
     /* Prevent body scroll when menu is open */
     body.menu-open {
         overflow: hidden;
-    }
-    
-    /* ========================================= */
-    /* CRITICAL MOBILE MENU Z-INDEX FIXES */
-    /* ========================================= */
-    
-    /* Ensure header creates proper stacking context */
-    header {
-        z-index: 10000 !important;
-        position: relative;
-    }
-    
-    /* Ensure hero and other sections stay behind menu */
-    .hero, section, footer, .slider-section {
-        position: relative;
-        z-index: 1;
-    }
-    
-    /* Make sure particles background stays behind everything */
-    #particles-js {
-        z-index: 0 !important;
     }
     
     .hero-text h1 {
@@ -344,6 +312,40 @@ html, body {
     .why-us::before,
     .achievements::before {
         max-width: 100vw;
+    }
+
+    /* ========================================= */
+    /* CLEAN MOBILE MENU Z-INDEX FIX */
+    /* ========================================= */
+    
+    /* Fix mobile menu layering */
+    .nav-links {
+        z-index: 10002 !important; /* Higher than hero and particles */
+    }
+    
+    .nav-overlay {
+        z-index: 10001 !important; /* Between menu and content */
+    }
+    
+    .mobile-menu {
+        z-index: 10003 !important; /* Highest - always clickable */
+    }
+    
+    /* Ensure header stays above content */
+    header {
+        z-index: 10000;
+        position: relative;
+    }
+    
+    /* Ensure hero and other sections stay behind menu */
+    .hero, section, footer, .slider-section {
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Make sure particles background stays behind everything */
+    #particles-js {
+        z-index: 0 !important;
     }
 }
 

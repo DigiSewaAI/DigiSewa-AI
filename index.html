@@ -65,6 +65,84 @@
       ]
     }
     </script>
+
+    <!-- Mobile Menu Z-Index Fix -->
+    <style>
+        /* ====================== */
+        /* MOBILE MENU Z-INDEX FIX - CLEAN SOLUTION */
+        /* ====================== */
+
+        @media (max-width: 768px) {
+            /* Ensure header stays above content without creating extra spacing */
+            header {
+                z-index: 10000;
+                /* Remove position: relative if it exists - it causes spacing issues */
+                position: fixed;
+                transform: translateZ(0); /* Hardware acceleration */
+            }
+            
+            /* Mobile menu overlay - behind menu but above content */
+            .nav-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                z-index: 10001;
+                display: none;
+            }
+            
+            .nav-overlay.active {
+                display: block;
+            }
+            
+            /* Mobile menu itself - highest priority */
+            .nav-links {
+                z-index: 10002 !important;
+                transform: translateZ(0); /* Hardware acceleration */
+            }
+            
+            /* Mobile menu close button - even higher */
+            .close-mobile-menu {
+                z-index: 10003 !important;
+            }
+            
+            /* Mobile menu toggle button */
+            .mobile-menu {
+                z-index: 10004 !important;
+            }
+            
+            /* Ensure hero and content stay behind menu */
+            .hero {
+                z-index: 1;
+                position: relative;
+            }
+            
+            /* All other sections should stay behind menu */
+            section:not(.hero) {
+                z-index: 1;
+                position: relative;
+            }
+            
+            /* Particles should stay in background */
+            #particles-js {
+                z-index: 0 !important;
+            }
+            
+            /* Prevent any layout shifts */
+            body.menu-open {
+                position: fixed;
+                width: 100%;
+                height: 100%;
+            }
+            
+            body.menu-open .hero,
+            body.menu-open section {
+                pointer-events: none; /* Allow clicks to pass through to menu */
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Particles.js Background -->
@@ -80,7 +158,7 @@
                 </div>
                 <ul class="nav-links">
                     <li class="mobile-menu-close">
-                        <button class="close-mobile-menu" id="close-mobile-menu">
+                        <button class="close-mobile-menu" id="close-mobile-menu" aria-label="Close menu">
                             <i class="fas fa-times"></i>
                         </button>
                     </li>
@@ -95,6 +173,9 @@
             </nav>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="nav-overlay"></div>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -596,6 +677,86 @@
     <!-- Internal JavaScript -->
     <script src="js/main.js"></script>
     <script src="js/chatbot.js"></script>
+    
+    <!-- Enhanced Mobile Menu JavaScript -->
+    <script>
+        // ======================
+        // OPTIMIZED MOBILE MENU - FIXED VERSION
+        // ======================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            const closeMobileMenu = document.querySelector('.close-mobile-menu');
+            const body = document.body;
+
+            // Create or get overlay element
+            let navOverlay = document.querySelector('.nav-overlay');
+            if (!navOverlay) {
+                navOverlay = document.createElement('div');
+                navOverlay.className = 'nav-overlay';
+                document.body.appendChild(navOverlay);
+            }
+
+            // Open mobile menu
+            if (mobileMenu) {
+                mobileMenu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openMobileMenu();
+                });
+            }
+
+            // Close mobile menu
+            if (closeMobileMenu) {
+                closeMobileMenu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    closeMobileMenuFunction();
+                });
+            }
+
+            // Close menu when clicking on overlay
+            navOverlay.addEventListener('click', closeMobileMenuFunction);
+
+            // Close menu when clicking on a link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', closeMobileMenuFunction);
+            });
+
+            // Close menu with Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                    closeMobileMenuFunction();
+                }
+            });
+
+            // Close menu on resize to desktop
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                    closeMobileMenuFunction();
+                }
+            });
+
+            function openMobileMenu() {
+                navLinks.classList.add('active');
+                navOverlay.classList.add('active');
+                body.classList.add('menu-open');
+                
+                // Prevent body scroll
+                document.documentElement.style.overflow = 'hidden';
+                body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenuFunction() {
+                navLinks.classList.remove('active');
+                navOverlay.classList.remove('active');
+                body.classList.remove('menu-open');
+                
+                // Restore body scroll
+                document.documentElement.style.overflow = '';
+                body.style.overflow = '';
+            }
+        });
+    </script>
     
     <!-- UPDATED NEWSLETTER JAVASCRIPT WITH NETLIFY FORMS -->
     <script>
