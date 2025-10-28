@@ -66,80 +66,148 @@
     }
     </script>
 
-    <!-- Mobile Menu Z-Index Fix -->
+    <!-- New Mobile Menu CSS -->
     <style>
         /* ====================== */
-        /* MOBILE MENU Z-INDEX FIX - CLEAN SOLUTION */
+        /* NEW MOBILE MENU SYSTEM */
         /* ====================== */
-
         @media (max-width: 768px) {
-            /* Ensure header stays above content without creating extra spacing */
-            header {
-                z-index: 10000;
-                /* Remove position: relative if it exists - it causes spacing issues */
-                position: fixed;
-                transform: translateZ(0); /* Hardware acceleration */
-            }
-            
-            /* Mobile menu overlay - behind menu but above content */
-            .nav-overlay {
+            /* Independent Mobile Menu Container */
+            .mobile-menu-container {
                 position: fixed;
                 top: 0;
                 left: 0;
                 width: 100%;
                 height: 100%;
-                background: rgba(0, 0, 0, 0.7);
-                z-index: 10001;
+                background: rgba(15, 23, 42, 0.98);
+                backdrop-filter: blur(10px);
                 display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 100000; /* Highest priority */
+                opacity: 0;
+                transition: opacity 0.3s ease;
             }
-            
-            .nav-overlay.active {
+
+            .mobile-menu-container.active {
+                display: flex;
+                opacity: 1;
+                animation: mobileMenuFadeIn 0.3s ease forwards;
+            }
+
+            @keyframes mobileMenuFadeIn {
+                from { 
+                    opacity: 0; 
+                    transform: translateY(-20px);
+                }
+                to { 
+                    opacity: 1; 
+                    transform: translateY(0);
+                }
+            }
+
+            /* Mobile Menu Content */
+            .mobile-menu-content {
+                background: rgba(255, 255, 255, 0.95);
+                padding: 30px 25px;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                text-align: center;
+                max-width: 90%;
+                position: relative;
+                animation: contentScaleIn 0.3s ease 0.1s both;
+            }
+
+            @keyframes contentScaleIn {
+                from { 
+                    opacity: 0; 
+                    transform: scale(0.9); 
+                }
+                to { 
+                    opacity: 1; 
+                    transform: scale(1); 
+                }
+            }
+
+            /* Close Button */
+            .mobile-close {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                background: #ef4444;
+                border: none;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                color: white;
+                font-size: 18px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s ease;
+                z-index: 100001;
+            }
+
+            .mobile-close:hover {
+                background: #dc2626;
+                transform: scale(1.1);
+            }
+
+            /* Mobile Links */
+            .mobile-links {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .mobile-links li {
+                margin: 0;
+            }
+
+            .mobile-links a {
                 display: block;
+                padding: 15px 30px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                text-decoration: none;
+                border-radius: 50px;
+                font-weight: 600;
+                font-size: 16px;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
             }
-            
-            /* Mobile menu itself - highest priority */
-            .nav-links {
-                z-index: 10002 !important;
-                transform: translateZ(0); /* Hardware acceleration */
+
+            .mobile-links a:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+                background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
             }
-            
-            /* Mobile menu close button - even higher */
-            .close-mobile-menu {
-                z-index: 10003 !important;
-            }
-            
-            /* Mobile menu toggle button */
-            .mobile-menu {
-                z-index: 10004 !important;
-            }
-            
-            /* Ensure hero and content stay behind menu */
-            .hero {
-                z-index: 1;
-                position: relative;
-            }
-            
-            /* All other sections should stay behind menu */
-            section:not(.hero) {
-                z-index: 1;
-                position: relative;
-            }
-            
-            /* Particles should stay in background */
-            #particles-js {
-                z-index: 0 !important;
-            }
-            
-            /* Prevent any layout shifts */
-            body.menu-open {
+
+            /* Ensure body doesn't scroll when menu is open */
+            body.mobile-menu-open {
+                overflow: hidden;
                 position: fixed;
                 width: 100%;
                 height: 100%;
             }
+        }
+
+        /* Hide old mobile menu system */
+        @media (max-width: 768px) {
+            .nav-overlay {
+                display: none !important;
+            }
             
-            body.menu-open .hero,
-            body.menu-open section {
-                pointer-events: none; /* Allow clicks to pass through to menu */
+            .nav-links.active {
+                display: none !important;
+            }
+            
+            .close-mobile-menu {
+                display: none !important;
             }
         }
     </style>
@@ -157,25 +225,32 @@
                     <div class="logo-text">DigiSewa AI</div>
                 </div>
                 <ul class="nav-links">
-                    <li class="mobile-menu-close">
-                        <button class="close-mobile-menu" id="close-mobile-menu" aria-label="Close menu">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </li>
                     <li><a href="#home">Home</a></li>
                     <li><a href="#services">Services</a></li>
                     <li><a href="#why-us">Why Us</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
-                <div class="mobile-menu">
+                <div class="mobile-menu" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="nav-overlay"></div>
+    <!-- New Mobile Menu -->
+    <div class="mobile-menu-container" id="mobileMenuContainer">
+        <div class="mobile-menu-content">
+            <button class="mobile-close" id="mobileCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <ul class="mobile-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#why-us">Why Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -678,83 +753,64 @@
     <script src="js/main.js"></script>
     <script src="js/chatbot.js"></script>
     
-    <!-- Enhanced Mobile Menu JavaScript -->
+    <!-- New Mobile Menu JavaScript -->
     <script>
         // ======================
-        // OPTIMIZED MOBILE MENU - FIXED VERSION
+        // NEW MOBILE MENU SYSTEM
         // ======================
-
         document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenu = document.querySelector('.mobile-menu');
-            const navLinks = document.querySelector('.nav-links');
-            const closeMobileMenu = document.querySelector('.close-mobile-menu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenuContainer = document.getElementById('mobileMenuContainer');
+            const mobileCloseBtn = document.getElementById('mobileCloseBtn');
             const body = document.body;
 
-            // Create or get overlay element
-            let navOverlay = document.querySelector('.nav-overlay');
-            if (!navOverlay) {
-                navOverlay = document.createElement('div');
-                navOverlay.className = 'nav-overlay';
-                document.body.appendChild(navOverlay);
-            }
-
             // Open mobile menu
-            if (mobileMenu) {
-                mobileMenu.addEventListener('click', (e) => {
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    openMobileMenu();
+                    mobileMenuContainer.classList.add('active');
+                    body.classList.add('mobile-menu-open');
                 });
             }
 
             // Close mobile menu
-            if (closeMobileMenu) {
-                closeMobileMenu.addEventListener('click', (e) => {
+            if (mobileCloseBtn) {
+                mobileCloseBtn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    closeMobileMenuFunction();
+                    closeMobileMenu();
                 });
             }
 
-            // Close menu when clicking on overlay
-            navOverlay.addEventListener('click', closeMobileMenuFunction);
-
-            // Close menu when clicking on a link
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', closeMobileMenuFunction);
+            // Close menu when clicking outside content
+            mobileMenuContainer.addEventListener('click', function(e) {
+                if (e.target === mobileMenuContainer) {
+                    closeMobileMenu();
+                }
             });
 
             // Close menu with Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && navLinks.classList.contains('active')) {
-                    closeMobileMenuFunction();
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && mobileMenuContainer.classList.contains('active')) {
+                    closeMobileMenu();
                 }
             });
 
-            // Close menu on resize to desktop
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
-                    closeMobileMenuFunction();
-                }
+            // Close menu when clicking on mobile links
+            document.querySelectorAll('.mobile-links a').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
             });
 
-            function openMobileMenu() {
-                navLinks.classList.add('active');
-                navOverlay.classList.add('active');
-                body.classList.add('menu-open');
-                
-                // Prevent body scroll
-                document.documentElement.style.overflow = 'hidden';
-                body.style.overflow = 'hidden';
+            function closeMobileMenu() {
+                mobileMenuContainer.classList.remove('active');
+                body.classList.remove('mobile-menu-open');
             }
 
-            function closeMobileMenuFunction() {
-                navLinks.classList.remove('active');
-                navOverlay.classList.remove('active');
-                body.classList.remove('menu-open');
-                
-                // Restore body scroll
-                document.documentElement.style.overflow = '';
-                body.style.overflow = '';
-            }
+            // Close menu on window resize (if resized to desktop)
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768 && mobileMenuContainer.classList.contains('active')) {
+                    closeMobileMenu();
+                }
+            });
         });
     </script>
     

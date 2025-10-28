@@ -82,7 +82,7 @@ html, body {
 }
 
 /* ====================== */
-/* MOBILE MENU FIXES */
+/* NEW MOBILE MENU SYSTEM */
 /* ====================== */
 
 @media (max-width: 768px) {
@@ -91,6 +91,7 @@ html, body {
         padding: 0 15px;
     }
     
+    /* New Mobile Menu Styles */
     .mobile-menu {
         display: flex !important;
         position: absolute;
@@ -109,110 +110,160 @@ html, body {
         cursor: pointer;
     }
     
-    .nav-links {
-        position: fixed;
-        top: 0;
-        left: -100%;
-        width: 85%;
-        height: 100vh;
-        background: white;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 80px 30px 30px;
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
-        overflow-y: auto;
-        z-index: 10002; /* Updated z-index */
-    }
-    
-    .nav-links.active {
-        left: 0;
-    }
-    
-    .nav-links li {
-        margin: 0;
-        width: 100%;
-        text-align: left;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    
-    .nav-links li:last-child {
-        border-bottom: none;
-    }
-    
-    .nav-links a {
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100%;
-        padding: 15px 20px;
-        font-size: 18px;
-        font-weight: 500;
-        color: var(--dark);
-        transition: var(--transition-smooth);
-    }
-    
-    .nav-links a:hover {
-        color: var(--primary);
-        background: rgba(102, 126, 234, 0.05);
-        padding-left: 25px;
-    }
-    
-    /* Mobile Menu Close Button */
-    .mobile-menu-close {
-        position: absolute !important;
-        top: 15px;
-        right: 15px;
-        border-bottom: none !important;
-        width: auto !important;
-    }
-    
-    .close-mobile-menu {
-        background: rgba(102, 126, 234, 0.1);
-        border: none;
-        border-radius: 50%;
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--primary);
-        font-size: 20px;
-        cursor: pointer;
-        transition: var(--transition-smooth);
-    }
-    
-    .close-mobile-menu:hover {
-        background: var(--premium-gradient);
-        color: white;
-        transform: rotate(90deg);
-    }
-    
-    /* Overlay when menu is open */
-    .nav-overlay {
+    /* Independent Mobile Menu Container */
+    .mobile-menu-container {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 10001; /* Updated z-index */
+        background: rgba(15, 23, 42, 0.98);
+        backdrop-filter: blur(10px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 100000; /* Highest priority */
         opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
+        transition: opacity 0.3s ease;
     }
-    
-    .nav-overlay.active {
+
+    .mobile-menu-container.active {
+        display: flex;
         opacity: 1;
-        visibility: visible;
+        animation: mobileMenuFadeIn 0.3s ease forwards;
     }
-    
+
+    @keyframes mobileMenuFadeIn {
+        from { 
+            opacity: 0; 
+            transform: translateY(-20px);
+        }
+        to { 
+            opacity: 1; 
+            transform: translateY(0);
+        }
+    }
+
+    /* Mobile Menu Content */
+    .mobile-menu-content {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 30px 25px;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 90%;
+        position: relative;
+        animation: contentScaleIn 0.3s ease 0.1s both;
+    }
+
+    @keyframes contentScaleIn {
+        from { 
+            opacity: 0; 
+            transform: scale(0.9); 
+        }
+        to { 
+            opacity: 1; 
+            transform: scale(1); 
+        }
+    }
+
+    /* Close Button */
+    .mobile-close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #ef4444;
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        z-index: 100001;
+    }
+
+    .mobile-close:hover {
+        background: #dc2626;
+        transform: scale(1.1);
+    }
+
+    /* Mobile Links */
+    .mobile-links {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .mobile-links li {
+        margin: 0;
+    }
+
+    .mobile-links a {
+        display: block;
+        padding: 15px 30px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .mobile-links a:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+
     /* Prevent body scroll when menu is open */
-    body.menu-open {
+    body.mobile-menu-open {
         overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Hide old mobile menu system */
+    .nav-overlay {
+        display: none !important;
     }
     
+    .nav-links.active {
+        display: none !important;
+    }
+    
+    .close-mobile-menu {
+        display: none !important;
+    }
+    
+    /* Ensure header stays above content */
+    header {
+        z-index: 10000;
+        position: relative;
+    }
+    
+    /* Ensure hero and other sections stay behind menu */
+    .hero, section, footer, .slider-section {
+        position: relative;
+        z-index: 1;
+    }
+    
+    /* Make sure particles background stays behind everything */
+    #particles-js {
+        z-index: 0 !important;
+    }
+    
+    /* Rest of mobile responsive styles */
     .hero-text h1 {
         font-size: 2.5rem;
         line-height: 1.2;
@@ -313,40 +364,6 @@ html, body {
     .achievements::before {
         max-width: 100vw;
     }
-
-    /* ========================================= */
-    /* CLEAN MOBILE MENU Z-INDEX FIX */
-    /* ========================================= */
-    
-    /* Fix mobile menu layering */
-    .nav-links {
-        z-index: 10002 !important; /* Higher than hero and particles */
-    }
-    
-    .nav-overlay {
-        z-index: 10001 !important; /* Between menu and content */
-    }
-    
-    .mobile-menu {
-        z-index: 10003 !important; /* Highest - always clickable */
-    }
-    
-    /* Ensure header stays above content */
-    header {
-        z-index: 10000;
-        position: relative;
-    }
-    
-    /* Ensure hero and other sections stay behind menu */
-    .hero, section, footer, .slider-section {
-        position: relative;
-        z-index: 1;
-    }
-    
-    /* Make sure particles background stays behind everything */
-    #particles-js {
-        z-index: 0 !important;
-    }
 }
 
 @media (max-width: 576px) {
@@ -398,14 +415,15 @@ html, body {
         padding: 0 10px;
     }
     
-    .nav-links {
-        width: 90%;
-        padding: 70px 20px 20px;
+    /* Mobile menu adjustments for small screens */
+    .mobile-menu-content {
+        padding: 25px 20px;
+        max-width: 95%;
     }
     
-    .nav-links a {
-        font-size: 16px;
-        padding: 12px 15px;
+    .mobile-links a {
+        padding: 12px 25px;
+        font-size: 15px;
     }
     
     .hero {
@@ -539,6 +557,16 @@ html, body {
         padding: 0 8px;
     }
     
+    /* Mobile menu fine-tuning for very small screens */
+    .mobile-menu-content {
+        padding: 20px 15px;
+    }
+    
+    .mobile-links a {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
     .hero-text h1 {
         font-size: 1.8rem;
     }
@@ -590,13 +618,21 @@ html, body {
         padding: 80px 0 40px;
     }
     
-    .nav-links {
-        height: calc(100vh - 60px);
-        padding: 20px 0;
+    /* Mobile menu adjustments for landscape */
+    .mobile-menu-content {
+        padding: 20px 25px;
     }
     
-    .nav-links li {
-        margin: 10px 0;
+    .mobile-links {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .mobile-links a {
+        padding: 10px 20px;
+        font-size: 14px;
     }
     
     .hero-text h1 {
@@ -625,7 +661,8 @@ html, body {
 @media print {
     .whatsapp-float,
     .mobile-menu,
-    .btn-premium {
+    .btn-premium,
+    .mobile-menu-container {
         display: none !important;
     }
     
@@ -670,6 +707,19 @@ html, body {
     .stat:hover {
         transform: none;
     }
+    
+    /* Mobile menu animations */
+    .mobile-menu-container.active {
+        animation: none;
+    }
+    
+    .mobile-menu-content {
+        animation: none;
+    }
+    
+    .mobile-links a:hover {
+        transform: none;
+    }
 }
 
 /* ====================== */
@@ -704,6 +754,10 @@ html, body {
     .btn-premium:hover {
         transform: none;
     }
+    
+    .mobile-links a:hover {
+        transform: none;
+    }
 }
 
 /* ====================== */
@@ -732,5 +786,21 @@ html, body {
     
     .tech-word {
         font-size: 1.5rem;
+    }
+    
+    /* Mobile menu adjustments for small height */
+    .mobile-menu-content {
+        padding: 20px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .mobile-links {
+        gap: 10px;
+    }
+    
+    .mobile-links a {
+        padding: 10px 20px;
+        font-size: 14px;
     }
 }
