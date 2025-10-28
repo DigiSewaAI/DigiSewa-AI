@@ -9,6 +9,49 @@ html, body {
     position: relative;
 }
 
+/* ====================== */
+/* SECTION SCROLL OFFSET FIX */
+/* ====================== */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Desktop section offsets */
+@media (min-width: 769px) {
+    section[id] {
+        scroll-margin-top: 80px;
+    }
+    
+    .hero {
+        scroll-margin-top: 0;
+    }
+}
+
+/* Mobile section offsets */
+@media (max-width: 768px) {
+    section[id] {
+        scroll-margin-top: 100px;
+    }
+    
+    .hero {
+        scroll-margin-top: 0;
+    }
+}
+
+/* Ensure sections are properly positioned for scrolling */
+#services,
+#why-us, 
+#contact,
+#expertise {
+    position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+}
+
 @media (max-width: 1200px) {
     .container {
         max-width: 1140px;
