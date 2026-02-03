@@ -73,13 +73,13 @@ document.addEventListener('DOMContentLoaded', function() {
         "location kaha ho?": "हामी काठमाडौं, नेपालमा छौं।",
         
         // Enhanced pricing/cost queries
-        "cost?": "Pricing depends on project scope. Simple websites start at $500.",
-        "price kati ho?": "परियोजनाको दायरामा निर्भर गर्दछ। साधारण वेबसाइटहरू $500 बाट सुरु हुन्छन्।",
-        "kati parchha?": "परियोजनाको दायरामा निर्भर गर्दछ। साधारण वेबसाइटहरू $500 बाट सुरु हुन्छन्।",
-        "how much?": "Pricing depends on project scope. Simple websites start at $500.",
+        "cost?": "Pricing depends on project scope. Simple websites start at $200.",
+        "price kati ho?": "परियोजनाको दायरामा निर्भर गर्दछ। साधारण वेबसाइटहरू $200 बाट सुरु हुन्छन्।",
+        "kati parchha?": "परियोजनाको दायरामा निर्भर गर्दछ। साधारण वेबसाइटहरू $200 बाट सुरु हुन्छन्।",
+        "how much?": "Pricing depends on project scope. Simple websites start at $200.",
         "services ko rate?": "सेवाहरूको दर परियोजनाको जटिलतामा निर्भर गर्दछ।",
-        "price kati?": "परियोजनाको दायरामा निर्भर गर्दछ। साधारण वेबसाइटहरू $500 बाट सुरु हुन्छन्।",
-        "kharcha kati?": "परियोजनाको दायरामा निर्भर गर्दछ। साधारण वेबसाइटहरू $500 बाट सुरु हुन्छन्।",
+        "price kati?": "परियोजनाको दायरामा निर्भर गर्दछ। साधारण वेबसाइटहरू $200 बाट सुरु हुन्छन्।",
+        "kharcha kati?": "परियोजनाको दायरामा निर्भर गर्दछ। साधारण वेबसाइटहरू $200 बाट सुरु हुन्छन्।",
         
         // Enhanced services queries
         "ke sewa dinchhau?": "हामी वेब विकास, AI एकीकरण, मोबाइल अनुप्रयोग र अधिक प्रदान गर्छौं।",
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         "email k ho?": "हाम्रो इमेल regmiashish629@gmail.com हो।",
         
         // Enhanced Nepali responses
-        "project cost": "परियोजनाको जटिलतामा निर्भर गर्दछ। साधारण वेबसाइट $500 बाट सुरु हुन्छ।",
+        "project cost": "परियोजनाको जटिलतामा निर्भर गर्दछ। साधारण वेबसाइट $200 बाट सुरु हुन्छ।",
         "timeframe": "साधारण वेबसाइट २-४ सप्ताह, जटिल अनुप्रयोग ६-८ सप्ताह लाग्छ।",
         "portfolio": "हाम्रो काम हेर्न https://digisewa-ai.com/portfolio मा जानुहोस्।",
         "team": "हामी ५ जना अनुभवी डेभलपरहरूको टोली हौं।",
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 } 
                 // Pricing context
                 else if (/(cost|price|kati|parchha|rate|kharcha)/i.test(lowerMessage)) {
-                    response = "Pricing depends on project scope. Simple websites start at $500.";
+                    response = "Pricing depends on project scope. Simple websites start at $200.";
                 }
                 // Services context
                 else if (/(service|sewa|offer|garchhau|provide|services)/i.test(lowerMessage)) {
